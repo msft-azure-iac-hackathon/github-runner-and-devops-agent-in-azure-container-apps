@@ -1,0 +1,5 @@
+name: build-linux-github-runner-container-image
+on:
+  push:
+    branches:
+      - "feature/ghr-runner-docker-image"
