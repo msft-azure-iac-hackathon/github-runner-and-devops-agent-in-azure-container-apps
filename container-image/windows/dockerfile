@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+LABEL Author="Bogdan Grozoiu"
+LABEL BaseImage="servercore:ltsc2022"
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'Continue'; $verbosePreference='Continue';"]
+
+RUN Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+RUN choco install -y \
+    git \
+    gh \
+    powershell-core \
+    azure-cli \
+    az.powershell
+
+SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'Continue'; $verbosePreference='Continue';"]
+
+RUN New-Item -Type Directory -Name actions-runner; \
+    Set-Location actions-runner; \
+    $LatestRunnerVersion = (((Invoke-WebRequest -Uri 'https://api.github.com/repos/actions/runner/releases/latest').Content | ConvertFrom-Json).tag_name).replace('v',''); \
+    Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$LatestRunnerVersion/actions-runner-win-x64-$LatestRunnerVersion.zip" -OutFile "actions-runner.zip"; \
+    Expand-Archive -Path ".\\actions-runner.zip" -DestinationPath '.'; \
+    Remove-Item -Path ".\\actions-runner.zip"
+
+ENTRYPOINT [ "cmd.exe" ]

@@ -24,7 +24,6 @@ jobs:
           tags: docker-github-runner-linux:latest
 
   build-windows-github-runner-container-image:
-    if: ${{ false }}
     runs-on: windows-latest
     steps:
       - name: Checkout current repo
