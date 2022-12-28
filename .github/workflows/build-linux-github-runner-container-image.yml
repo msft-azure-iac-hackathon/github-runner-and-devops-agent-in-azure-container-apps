@@ -5,7 +5,7 @@ on:
       - "feature/ghr-runner-docker-image"
 jobs:
   build-linux-github-runner-container-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout current repo
         uses: actions/checkout@v3
