@@ -23,4 +23,6 @@ RUN New-Item -Type Directory -Name actions-runner; \
     Expand-Archive -Path ".\\actions-runner.zip" -DestinationPath '.'; \
     Remove-Item -Path ".\\actions-runner.zip"
 
-ENTRYPOINT [ "cmd.exe" ]
+ADD bootstrap/start.ps1 .
+
+ENTRYPOINT ["pwsh.exe", ".\\start.ps1"]
