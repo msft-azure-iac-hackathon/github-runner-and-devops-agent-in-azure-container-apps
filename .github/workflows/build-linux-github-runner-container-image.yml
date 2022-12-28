@@ -29,12 +29,5 @@ jobs:
       - name: Checkout current repo
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      
-      - name: Windows Container Image Build  
-        uses: docker/build-push-action@v3
-        with:
-          context: "{{defaultContext}}:container-image/windows"
-          push: false
-          tags: docker-github-runner-windows:latest
+      - run: |
+          docker build --tag docker-github-runner-windows .\container-image\windows
