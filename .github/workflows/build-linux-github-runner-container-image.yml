@@ -24,14 +24,15 @@ jobs:
           tags: docker-github-runner-linux:latest
 
   build-windows-github-runner-container-image:
+    if: ${{ false }}
     runs-on: windows-latest
     steps:
       - name: Checkout current repo
         uses: actions/checkout@v3
       
-#      - name: Build 
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: "{{defaultContext}}:container-image/windows"
-#          push: false
-#          tags: docker-github-runner-linux:latest
+      - name: Build 
+        uses: docker/build-push-action@v3
+        with:
+          context: "{{defaultContext}}:container-image/windows"
+          push: false
+          tags: docker-github-runner-windows:latest
