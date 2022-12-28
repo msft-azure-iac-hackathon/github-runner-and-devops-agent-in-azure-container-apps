@@ -32,5 +32,5 @@ catch {
 }
 finally {
     # This won't work until this is fixed https://github.com/moby/moby/issues/25982# and manual cleanup is required
-    ./config.cmd remove --unattended --token $REG_TOKEN
+    ./config.cmd remove --token $REG_TOKEN
 }
