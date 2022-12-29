@@ -1,8 +1,7 @@
 name: build-github-runner-container-images
 on:
-  push:
-    branches:
-      - "feature/ghr-runner-docker-image"
+  workflow_dispatch:
+  
 jobs:
   build-linux-github-runner-container-image:
     runs-on: ubuntu-22.04
