@@ -20,9 +20,10 @@ $REG_TOKEN_GEN = Invoke-WebRequest `
 $REG_TOKEN = $REG_TOKEN_GEN.Content | ConvertFrom-Json | Select-Object -ExpandProperty token
 dir
 
+
 try {
     Write-Host "Registering [$RUNNER_NAME] on [$owner/$repo]..."
-    ./config.cmd --unattended --url "https://github.com/$owner/$repo" --token $REG_TOKEN --name $RUNNER_NAME
+    ./config.cmd --unattended --url "https://github.com/$owner/$repo" --token $REG_TOKEN --name $RUNNER_NAME --labels pwsh,azps,azcli
     $pat=$null
     $env:GH_TOKEN=$null
     ./run.cmd
