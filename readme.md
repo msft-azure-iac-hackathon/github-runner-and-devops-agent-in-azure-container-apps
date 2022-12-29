@@ -7,7 +7,7 @@ This repository was created initially as a rework of the following 2 repositorie
 * [Bogdan Grozoiu](https://github.com/bogdan-grozoiu)
 
 # Status
-![Build status?](https://github.com/MSFT-NL-Demo/github-runner-in-azure-container-apps/actions/workflows/build-github-runner-container-images.yml/badge.svg?branch=feature/ghr-runner-docker-image)
+![Build status?](https://github.com/MSFT-NL-Demo/github-runner-in-azure-container-apps/actions/workflows/build-github-runner-container-images.yml/badge.svg?branch=main)
 
 # Scope
 * To empower every person and every organization on the planet to achieve more
