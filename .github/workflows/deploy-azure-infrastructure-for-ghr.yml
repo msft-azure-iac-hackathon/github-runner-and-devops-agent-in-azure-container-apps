@@ -1,0 +1,14 @@
+name: Deploy the Azure infrastructure for GitHub runners
+on:
+  push:
+    branches: [feature/azure-infra-for-ghr]
+  workflow_dispatch:
+
+jobs:
+  oidc:
+    runs-on: [self-hosted, linux]
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@feature/azure-infra-for-ghr
