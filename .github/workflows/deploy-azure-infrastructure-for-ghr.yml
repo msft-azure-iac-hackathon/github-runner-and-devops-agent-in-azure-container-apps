@@ -37,3 +37,4 @@ jobs:
         with:
           template: arm-templates/log-analytics-workspace.template.json
           parameters: arm-templates/log-analytics-workspace.params.json
+          ResourceGroup: "bgrozoiu-ghr-rsg-02"
