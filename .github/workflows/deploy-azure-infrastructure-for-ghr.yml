@@ -27,6 +27,7 @@ jobs:
         name: Create the Resource Group
         with:
           scope: subscription
+          region: westeurope
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           template: arm-templates/resource-group.template.json
           parameters: arm-templates/resource-group.params.json
