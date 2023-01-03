@@ -23,9 +23,10 @@ jobs:
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
       
-      - name: List Resource Groups
-        uses: azure/powershell@v1
+      - uses: azure/arm-deploy@v1
+        name: Create the Resource Group
         with:
-          inlineScript: |
-            Get-AzResourceGroup
-          azPSVersion: "latest"
+          scope: subscription
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          template: arm-templates/resource-group.template.json
+          parameters: arm-templates/resource-group.params.json
