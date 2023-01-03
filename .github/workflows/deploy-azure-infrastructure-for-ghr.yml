@@ -25,6 +25,7 @@ jobs:
       
       - uses: azure/arm-deploy@v1
         name: Create the Resource Group
+        id: resourceGroup
         with:
           scope: subscription
           region: westeurope
@@ -34,7 +35,8 @@ jobs:
       
       - uses: azure/arm-deploy@v1
         name: Create the Log Analytics Workspace
+        id: logAnalyticsWorkspace
         with:
           template: arm-templates/log-analytics-workspace.template.json
           parameters: arm-templates/log-analytics-workspace.params.json
-          resourceGroupName: "bgrozoiu-ghr-rsg-02"
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
