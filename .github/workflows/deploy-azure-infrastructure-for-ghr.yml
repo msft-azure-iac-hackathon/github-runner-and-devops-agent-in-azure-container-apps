@@ -31,3 +31,9 @@ jobs:
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           template: arm-templates/resource-group.template.json
           parameters: arm-templates/resource-group.params.json
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Log Analytics Workspace
+        with:
+          template: arm-templates/log-analytics-workspace.template.json
+          parameters: arm-templates/log-analytics-workspace.params.json
