@@ -40,3 +40,12 @@ jobs:
           template: arm-templates/log-analytics-workspace.template.json
           parameters: arm-templates/log-analytics-workspace.params.json
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Network Security Group
+        id: networkSecurityGroup
+        with:
+          template: arm-templates/network-security-group.template.json
+          parameters: arm-templates/network-security-group.params.json
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
