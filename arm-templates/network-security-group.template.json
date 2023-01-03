@@ -24,7 +24,7 @@
     ],
     "outputs": {
         "networkSecurityGroupID": {
-            "type": "object",
+            "type": "string",
             "value": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
         }
     }
