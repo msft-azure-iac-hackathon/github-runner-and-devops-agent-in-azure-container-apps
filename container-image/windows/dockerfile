@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 LABEL Author="Bogdan Grozoiu"
 LABEL BaseImage="servercore:ltsc2022"
 
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'Continue'; $verbosePreference='Continue';"]
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $verbosePreference='Continue';"]
 
 RUN Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
@@ -14,7 +14,7 @@ RUN choco install -y \
     azure-cli \
     az.powershell
 
-SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'Continue'; $verbosePreference='Continue';"]
+SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $verbosePreference='Continue';"]
 
 RUN New-Item -Type Directory -Name actions-runner; \
     Set-Location actions-runner; \

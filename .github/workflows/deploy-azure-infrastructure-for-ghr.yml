@@ -11,4 +11,6 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@feature/azure-infra-for-ghr
+      - uses: actions/checkout@v3
+        with:
+          ref: 'feature/azure-infra-for-ghr'
