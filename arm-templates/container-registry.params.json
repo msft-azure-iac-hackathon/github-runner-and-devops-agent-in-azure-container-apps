@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "acrName": {
-            "value": "bgrozoiu-ghr-law-02"
+            "value": "bgrozoiughracr02"
         }
     }
 }
