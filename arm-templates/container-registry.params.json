@@ -4,6 +4,18 @@
     "parameters": {
         "acrName": {
             "value": "bgrozoiughracr02"
+        },
+        "privateEndpointName":{
+            "value": "bgrozoiu-ghr-acr-pe-02"
+        },
+        "customNetworkInterfaceName":{
+            "value": "bgrozoiu-ghr-acr-nic-02"
+        },
+        "virtualNetworkId":{
+            "value":""
+        },
+        "subnetID":{
+            "value":""
         }
     }
 }

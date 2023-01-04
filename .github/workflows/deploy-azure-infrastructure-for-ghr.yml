@@ -70,7 +70,7 @@ jobs:
         id: applicationInsights
         with:
           template: arm-templates/container-registry.template.json
-          parameters: arm-templates/container-registry.params.json 
+          parameters: arm-templates/container-registry.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
