@@ -38,7 +38,9 @@
                         "type": "Microsoft.Network/virtualNetworks/subnets",
                         "properties": {
                             "addressPrefix": "[parameters('subnetAddressPrefix')]",
-                            "networkSecurityGroup": "[parameters('networkSecurityGroupID')]",
+                            "networkSecurityGroup": {
+                                "id": "[parameters('networkSecurityGroupID')]"
+                            },
                             "privateEndpointNetworkPolicies": "Enabled"
                         }
                     }
