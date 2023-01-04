@@ -6,13 +6,13 @@
             "value": "bgrozoiu-ghr-vnt-02"
         },
         "virtualNetworkAddressPrefix": {
-            "value": "10.255.255.0/24"
+            "value": "10.255.0.0/21"
         },
         "subnetName": {
             "value": "bgrozoiu-ghr-snt-02"
         },
         "subnetAddressPrefix": {
-            "value": "10.255.255.0/24"
+            "value": "10.255.0.0/21"
         }
     }
 }
