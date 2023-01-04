@@ -53,6 +53,6 @@ jobs:
         name: Create the Virtual Network
         id: virtualNetwork
         with:
-          template: arm-templates/virtual-network.template.template.json
-          parameters: arm-templates/virtual-network.template.params.json networkSecurityGroupID=${{ steps.networkSecurityGroup.outputs.networkSecurityGroupID }}
+          template: arm-templates/virtual-network.template.json
+          parameters: arm-templates/virtual-network.params.json networkSecurityGroupID=${{ steps.networkSecurityGroup.outputs.networkSecurityGroupID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
