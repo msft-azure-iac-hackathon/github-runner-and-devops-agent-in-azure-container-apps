@@ -13,6 +13,9 @@
         },
         "subnetAddressPrefix": {
             "type": "string"
+        },
+        "networkSecurityGroupID": {
+            "type": "string"
         }
     },
     "functions": [],
@@ -35,6 +38,7 @@
                         "type": "Microsoft.Network/virtualNetworks/subnets",
                         "properties": {
                             "addressPrefix": "[parameters('subnetAddressPrefix')]",
+                            "networkSecurityGroup": "[parameters('networkSecurityGroupID')]",
                             "privateEndpointNetworkPolicies": "Enabled"
                         }
                     }
@@ -42,5 +46,14 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "virtualNetworkID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+        },
+        "subnetID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+        }
+    }
 }

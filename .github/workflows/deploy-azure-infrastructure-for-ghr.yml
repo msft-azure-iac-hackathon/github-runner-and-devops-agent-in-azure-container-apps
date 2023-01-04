@@ -49,3 +49,10 @@ jobs:
           parameters: arm-templates/network-security-group.params.json
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
+      - uses: azure/arm-deploy@v1
+        name: Create the Virtual Network
+        id: virtualNetwork
+        with:
+          template: arm-templates/virtual-network.template.template.json
+          parameters: arm-templates/virtual-network.template.params.json networkSecurityGroupID=${{ steps.networkSecurityGroup.outputs.networkSecurityGroupID }}
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
