@@ -66,9 +66,17 @@ jobs:
 #          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
+        name: Create the Azure Container Registry
+        id: applicationInsights
+        with:
+          template: arm-templates/container-registry.template.json
+          parameters: arm-templates/container-registry.params.json 
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
         name: Create the Managed Environment
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId='${{ steps.logAnalyticsWorkspace.outputs.workspaceId }}' workspaceKey='${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }}' subnetID='${{ steps.virtualNetwork.outputs.subnetID }}'
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ steps.logAnalyticsWorkspace.outputs.workspaceId }} workspaceKey=${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}          
