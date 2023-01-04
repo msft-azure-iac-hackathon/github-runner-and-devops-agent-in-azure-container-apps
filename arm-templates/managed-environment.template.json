@@ -41,7 +41,7 @@
                     "destination": "log-analytics",
                     "logAnalyticsConfiguration": {
                         "customerId": "[parameters('workspaceId')]",
-                        "sharedKey": "[parameters('workspaceKey')]]"
+                        "sharedKey": "[parameters('workspaceKey')]"
                     }
                 },
                 "vnetConfiguration": {
@@ -55,5 +55,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "managedEnvironmentId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.App/managedEnvironments', parameters('managedEnvironmentName'))]"
+        }
+    }
 }
