@@ -16,11 +16,12 @@
             "type": "Microsoft.ContainerRegistry/registries",
             "apiVersion": "2022-02-01-preview",
             "name": "[parameters('acrName')]",
+            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Premium"
             },
             "properties": {
-                "publicNetworkAccess": "Enabled",
+                "publicNetworkAccess": "disabled",
                 "zoneRedundancy": "disabled"
             }
         }
