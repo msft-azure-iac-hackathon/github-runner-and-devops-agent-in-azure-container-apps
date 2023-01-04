@@ -34,9 +34,13 @@
         }
     ],
     "outputs": {
-        "workspaceId": {
+        "workspaceResourceId": {
             "type": "string",
             "value": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+        },
+        "workspaceId": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName')), '2021-12-01-preview').customerId]"
         }
     }
 }

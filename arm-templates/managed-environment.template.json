@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedEnvironmentName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Managed Environment."
+            }
+        },
+        "workspaceId": {
+            "type": "string",
+            "metadata": {
+                "description": "The resource ID of the Log Analytics workspace to which you would like to send Diagnostic Logs."
+            }
+        },
+        "subnetID": {
+            "type": "string",
+            "metadata": {
+                "description": "The resource ID of the subnet to which you would like to integrate."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2022-06-01-preview",
+            "name": "[parameters('managedEnvironmentName')]",
+            "type": "Microsoft.App/managedEnvironments",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "internalLoadBalancerEnabled": false,
+                "appLogsConfiguration": {
+                    "destination": "log-analytics",
+                    "logAnalyticsConfiguration": {
+                        "customerId": "[reference(parameters('workspaceId'), '2020-08-01').customerId]",
+                        "sharedKey": "[listKeys(parameters('workspaceId'), '2020-08-01').primarySharedKey]"
+                    }
+                },
+                "vnetConfiguration": {
+                    "infrastructureSubnetId": "[parameters('subnetID')]",
+                    "internal": true
+                },
+                "zoneRedundant": false
+            },
+            "sku": {
+                "name": "Consumption"
+            }
+        }
+    ],
+    "outputs": {}
+}

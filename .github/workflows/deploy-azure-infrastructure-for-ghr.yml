@@ -56,3 +56,19 @@ jobs:
           template: arm-templates/virtual-network.template.json
           parameters: arm-templates/virtual-network.params.json networkSecurityGroupID=${{ steps.networkSecurityGroup.outputs.networkSecurityGroupID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+#      - uses: azure/arm-deploy@v1
+#        name: Create the Application Insights
+#        id: applicationInsights
+#        with:
+#          template: arm-templates/application-insights.template.json
+#          parameters: arm-templates/application-insights.params.json 
+#          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Managed Environment
+        id: managedEnvironment
+        with:
+          template: arm-templates/managed-environment.template.json
+          parameters: arm-templates/managed-environment.params.json workspaceId={{ steps.logAnalyticsWorkspace.outputs.workspaceResourceId }} subnetID={{ steps.virtualNetwork.outputs.subnetID }}
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}          
