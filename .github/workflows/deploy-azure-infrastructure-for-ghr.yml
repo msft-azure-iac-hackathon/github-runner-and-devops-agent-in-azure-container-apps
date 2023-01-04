@@ -70,5 +70,5 @@ jobs:
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId={{ steps.logAnalyticsWorkspace.outputs.workspaceResourceId }} subnetID={{ steps.virtualNetwork.outputs.subnetID }}
+          parameters: arm-templates/managed-environment.params.json workspaceId={{ steps.logAnalyticsWorkspace.outputs.workspaceId }} workspaceKey={{ steps.logAnalyticsWorkspace.outputs.workspaceKey }} subnetID={{ steps.virtualNetwork.outputs.subnetID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}          

@@ -14,6 +14,12 @@
                 "description": "The resource ID of the Log Analytics workspace to which you would like to send Diagnostic Logs."
             }
         },
+        "workspaceKey": {
+            "type": "string",
+            "metadata": {
+                "description": "The primary or secondary Connected Sources client authentication key for the Log Analytics workspace."
+            }
+        },
         "subnetID": {
             "type": "string",
             "metadata": {
@@ -34,8 +40,8 @@
                 "appLogsConfiguration": {
                     "destination": "log-analytics",
                     "logAnalyticsConfiguration": {
-                        "customerId": "[reference(parameters('workspaceId'), '2020-08-01').customerId]",
-                        "sharedKey": "[listKeys(parameters('workspaceId'), '2020-08-01').primarySharedKey]"
+                        "customerId": "[parameters('workspaceId')]",
+                        "sharedKey": "[parameters('workspaceKey')]]"
                     }
                 },
                 "vnetConfiguration": {

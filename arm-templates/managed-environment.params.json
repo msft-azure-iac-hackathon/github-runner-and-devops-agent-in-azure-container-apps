@@ -4,6 +4,15 @@
     "parameters": {
         "managedEnvironmentName": {
             "value": "bgrozoiu-ghr-cae-02"
+        },
+        "workspaceId": {
+            "value": ""
+        },
+        "workspaceKey": {
+            "value": ""
+        },
+        "subnetID": {
+            "value": ""
         }
     }
 }
