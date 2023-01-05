@@ -161,7 +161,7 @@ jobs:
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} subnetID='/subscriptions/4c499a50-3a78-4e0a-98fc-36eb8b9ba183/resourceGroups/bgrozoiu-ghr-rsg-02/providers/Microsoft.Network/virtualNetworks/bgrozoiu-ghr-vnt-02/subnets/bgrozoiu-ghr-snt-02' #subnetID=${{ needs.azure-infrastructure-foundation.outputs.subnetID }}
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} subnetID="/subscriptions/4c499a50-3a78-4e0a-98fc-36eb8b9ba183/resourceGroups/bgrozoiu-ghr-rsg-02/providers/Microsoft.Network/virtualNetworks/bgrozoiu-ghr-vnt-02/subnets/bgrozoiu-ghr-snt-02" #subnetID=${{ needs.azure-infrastructure-foundation.outputs.subnetID }}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
