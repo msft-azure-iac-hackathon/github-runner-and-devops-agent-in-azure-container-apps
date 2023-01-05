@@ -126,6 +126,10 @@
         "acrResourceId": {
             "type": "string",
             "value": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]"
+        },
+        "azureContainerRegistryName": {
+            "type": "string",
+            "value": "[parameters('acrName')]"
         }
     }
 }
