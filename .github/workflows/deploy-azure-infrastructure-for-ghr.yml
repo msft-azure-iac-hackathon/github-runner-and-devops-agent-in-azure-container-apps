@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  foundation:
+  azure-infrastructure-foundation:
     runs-on: [self-hosted, linux]
     permissions:
       contents: read
@@ -57,14 +57,6 @@ jobs:
           parameters: arm-templates/virtual-network.params.json networkSecurityGroupID=${{ steps.networkSecurityGroup.outputs.networkSecurityGroupID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
-#      - uses: azure/arm-deploy@v1
-#        name: Create the Application Insights
-#        id: applicationInsights
-#        with:
-#          template: arm-templates/application-insights.template.json
-#          parameters: arm-templates/application-insights.params.json 
-#          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
-
       - uses: azure/arm-deploy@v1
         name: Create the Azure Container Registry
         id: applicationInsights
@@ -79,4 +71,56 @@ jobs:
         with:
           template: arm-templates/managed-environment.template.json
           parameters: arm-templates/managed-environment.params.json workspaceId=${{ steps.logAnalyticsWorkspace.outputs.workspaceId }} workspaceKey=${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
-          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}          
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+  build-linux-github-runner-container-image:
+    runs-on: ubuntu-22.04
+    needs: azure-infrastructure-foundation
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+      
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Linux Container Image Build 
+        uses: docker/build-push-action@v3
+        with:
+          context: "{{defaultContext}}:container-image/linux"
+          push: false
+          tags: bgrozoiughracr02.azurecr.io/github-runner/linux
+
+  build-windows-github-runner-container-image:
+    runs-on: windows-latest
+    needs: azure-infrastructure-foundation
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - run: |
+          docker build --tag bgrozoiughracr02.azurecr.io/github-runner/windows .\container-image\windows
