@@ -20,7 +20,7 @@ jobs:
         with:
           context: "{{defaultContext}}:container-image/linux"
           push: false
-          tags: docker-github-runner-linux:latest
+          tags: bgrozoiughracr02.azurecr.io/github-runner/linux
 
   build-windows-github-runner-container-image:
     runs-on: windows-latest
@@ -29,4 +29,4 @@ jobs:
         uses: actions/checkout@v3
 
       - run: |
-          docker build --tag docker-github-runner-windows .\container-image\windows
+          docker build --tag bgrozoiughracr02.azurecr.io/github-runner/windows .\container-image\windows
