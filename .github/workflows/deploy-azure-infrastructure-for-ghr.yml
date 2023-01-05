@@ -1,12 +1,12 @@
 name: Deploy the Azure infrastructure for GitHub runners
 on:
   push:
-    branches: [feature/azure-infra-for-ghr]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   azure-infrastructure-foundation:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
@@ -75,7 +75,6 @@ jobs:
   build-linux-github-runner-container-image:
     runs-on: ubuntu-22.04
     needs: azure-infrastructure-foundation
-    if: false
     permissions:
       contents: read
       id-token: write
@@ -111,7 +110,6 @@ jobs:
   build-windows-github-runner-container-image:
     runs-on: windows-latest
     needs: azure-infrastructure-foundation
-    if: false
     permissions:
       contents: read
       id-token: write
@@ -137,7 +135,7 @@ jobs:
 
   azure-infrastructure-continuation:
     runs-on: ubuntu-22.04
-    needs: [azure-infrastructure-foundation] #, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
+    needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
     permissions:
       contents: read
       id-token: write
