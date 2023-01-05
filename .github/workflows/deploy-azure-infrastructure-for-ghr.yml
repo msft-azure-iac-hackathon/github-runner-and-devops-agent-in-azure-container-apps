@@ -91,6 +91,9 @@ jobs:
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
+      - run: |
+          az acr login --name bgrozoiughracr02
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       
@@ -101,7 +104,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: "{{defaultContext}}:container-image/linux"
-          push: false
+          push: true
           tags: bgrozoiughracr02.azurecr.io/github-runner/linux
 
   build-windows-github-runner-container-image:
@@ -123,4 +126,8 @@ jobs:
           enable-AzPSSession: true
 
       - run: |
+          az acr login --name bgrozoiughracr02
+
+      - run: |
           docker build --tag bgrozoiughracr02.azurecr.io/github-runner/windows .\container-image\windows
+          docker push bgrozoiughracr02.azurecr.io/github-runner/windows
