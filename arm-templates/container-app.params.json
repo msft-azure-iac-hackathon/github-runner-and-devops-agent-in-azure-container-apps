@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "managedIdentityName": {
+            "value": "bgrozoiu-ghr-uai-02"
+        },
+        "managedEnvironmentId": {
+            "value": "/subscriptions/4c499a50-3a78-4e0a-98fc-36eb8b9ba183/resourceGroups/bgrozoiu-ghr-rsg-02/providers/Microsoft.App/managedEnvironments/bgrozoiu-ghr-cae-02"
+        },
+        "containerAppName": {
+            "value": "bgrozoiu-ghr-cap-02"
+        },
+        "containerRegistryResourceId": {
+            "value": "/subscriptions/4c499a50-3a78-4e0a-98fc-36eb8b9ba183/resourceGroups/bgrozoiu-ghr-rsg-02/providers/Microsoft.ContainerRegistry/registries/bgrozoiughracr02"
+        },
+        "containerName":{
+            "value": "github-runner-linux"
+        },
+        "containerImage":{
+            "value": ""
+        },
+        "githubOwner":{
+            "value": ""
+        },
+        "githubRepository":{
+            "value": ""
+        },
+        "githubToken":{
+            "value": ""
+        }
+    }
+}

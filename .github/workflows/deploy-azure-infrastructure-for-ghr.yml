@@ -11,7 +11,12 @@ jobs:
       contents: read
       id-token: write
     outputs:
+      resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
       containerRegistryName: ${{ steps.containerRegistry.outputs.azureContainerRegistryName }}
+      containerRegistryResourceId: ${{ steps.containerRegistry.outputs.acrResourceId }}
+      workspaceId: ${{ steps.logAnalyticsWorkspace.outputs.workspaceId }}
+      workspaceKey: ${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }}
+      subnetID: ${{ steps.virtualNetwork.outputs.subnetID }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -130,7 +135,7 @@ jobs:
 
   azure-infrastructure-continuation:
     runs-on: ubuntu-22.04
-    needs: [build-linux-github-runner-container-image, build-windows-github-runner-container-image]
+    needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
     permissions:
       contents: read
       id-token: write
@@ -154,5 +159,13 @@ jobs:
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ steps.logAnalyticsWorkspace.outputs.workspaceId }} workspaceKey=${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
-          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} subnetID=${{ needs.azure-infrastructure-foundation.outputs.subnetID }}
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Container App
+        id: linuxContainerApp
+        with:
+          template: arm-templates/container-app.template.json
+          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryResourceId=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryResourceId }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken={{ secrets.GH_PAT }}
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
