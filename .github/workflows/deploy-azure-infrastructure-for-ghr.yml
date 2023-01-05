@@ -19,8 +19,6 @@ jobs:
       subnetName: ${{ steps.virtualNetwork.outputs.subnetName }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: 'feature/azure-infra-for-ghr'
 
       - uses: azure/login@v1
         name: OIDC Login to Customer Tenant
