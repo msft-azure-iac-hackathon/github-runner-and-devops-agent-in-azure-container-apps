@@ -15,7 +15,7 @@
             }
         },
         "workspaceKey": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "The primary or secondary Connected Sources client authentication key for the Log Analytics workspace."
             }
