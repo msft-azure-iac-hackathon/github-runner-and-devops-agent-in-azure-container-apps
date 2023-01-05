@@ -10,6 +10,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    outputs:
+      containerRegistryName: ${{ steps.containerRegistry.outputs.azureContainerRegistryName }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -59,18 +61,10 @@ jobs:
 
       - uses: azure/arm-deploy@v1
         name: Create the Azure Container Registry
-        id: applicationInsights
+        id: containerRegistry
         with:
           template: arm-templates/container-registry.template.json
           parameters: arm-templates/container-registry.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
-          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
-
-      - uses: azure/arm-deploy@v1
-        name: Create the Managed Environment
-        id: managedEnvironment
-        with:
-          template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ steps.logAnalyticsWorkspace.outputs.workspaceId }} workspaceKey=${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
   build-linux-github-runner-container-image:
@@ -92,8 +86,8 @@ jobs:
           enable-AzPSSession: true
 
       - run: |
-          az acr update --name bgrozoiughracr02 --public-network-enabled true
-          az acr login --name bgrozoiughracr02
+          az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled true
+          az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -106,7 +100,7 @@ jobs:
         with:
           context: "{{defaultContext}}:container-image/linux"
           push: true
-          tags: bgrozoiughracr02.azurecr.io/github-runner/linux
+          tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
 
   build-windows-github-runner-container-image:
     runs-on: windows-latest
@@ -127,9 +121,38 @@ jobs:
           enable-AzPSSession: true
 
       - run: |
-          az acr update --name bgrozoiughracr02 --public-network-enabled true
-          az acr login --name bgrozoiughracr02
+          az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled true
+          az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
 
       - run: |
-          docker build --tag bgrozoiughracr02.azurecr.io/github-runner/windows .\container-image\windows
-          docker push bgrozoiughracr02.azurecr.io/github-runner/windows
+          docker build --tag ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows .\container-image\windows
+          docker push ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows
+
+  azure-infrastructure-continuation:
+    runs-on: ubuntu-22.04
+    needs: [build-linux-github-runner-container-image, build-windows-github-runner-container-image]
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+      
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - run: |
+          az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled false
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Managed Environment
+        id: managedEnvironment
+        with:
+          template: arm-templates/managed-environment.template.json
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ steps.logAnalyticsWorkspace.outputs.workspaceId }} workspaceKey=${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
