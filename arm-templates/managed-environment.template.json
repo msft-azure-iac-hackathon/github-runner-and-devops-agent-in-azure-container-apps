@@ -15,13 +15,13 @@
             }
         },
         "workspaceKey": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "The primary or secondary Connected Sources client authentication key for the Log Analytics workspace."
             }
         },
         "subnetID": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "The resource ID of the subnet to which you would like to integrate."
             }

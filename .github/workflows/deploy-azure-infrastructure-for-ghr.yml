@@ -75,6 +75,7 @@ jobs:
   build-linux-github-runner-container-image:
     runs-on: ubuntu-22.04
     needs: azure-infrastructure-foundation
+    if: false
     permissions:
       contents: read
       id-token: write
@@ -110,6 +111,7 @@ jobs:
   build-windows-github-runner-container-image:
     runs-on: windows-latest
     needs: azure-infrastructure-foundation
+    if: false
     permissions:
       contents: read
       id-token: write
@@ -135,7 +137,7 @@ jobs:
 
   azure-infrastructure-continuation:
     runs-on: ubuntu-22.04
-    needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
+    needs: [azure-infrastructure-foundation] #, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
     permissions:
       contents: read
       id-token: write
