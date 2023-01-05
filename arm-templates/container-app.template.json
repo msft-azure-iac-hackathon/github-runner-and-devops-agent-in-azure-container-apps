@@ -51,7 +51,7 @@
             }
         },
         "githubToken": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "The GitHub token."
             }
