@@ -27,7 +27,7 @@
             }
         },
         "subnetID": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "ID of the subnet"
             }
