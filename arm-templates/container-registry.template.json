@@ -1,0 +1,135 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "acrName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the ACR"
+            }
+        },
+        "privateEndpointName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the private endpoint"
+            }
+        },
+        "customNetworkInterfaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the custom network interface"
+            }
+        },
+        "virtualNetworkId": {
+            "type": "string",
+            "metadata": {
+                "description": "ID of the virtual network"
+            }
+        },
+        "subnetID": {
+            "type": "securestring",
+            "metadata": {
+                "description": "ID of the subnet"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerRegistry/registries",
+            "apiVersion": "2022-02-01-preview",
+            "name": "[parameters('acrName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Premium"
+            },
+            "properties": {
+                "publicNetworkAccess": "disabled",
+                "zoneRedundancy": "disabled"
+            }
+        },
+        {
+            "location": "[resourceGroup().location]",
+            "name": "[parameters('privateEndpointName')]",
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2021-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]"
+            ],
+            "properties": {
+                "subnet": {
+                    "id": "[parameters('subnetID')]"
+                },
+                "customNetworkInterfaceName": "[parameters('customNetworkInterfaceName')]",
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[parameters('privateEndpointName')]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]",
+                            "groupIds": [
+                                "registry"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "privatelink.azurecr.io",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', parameters('privateEndpointName'))]"
+            ],
+            "tags": {},
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat('privatelink.azurecr.io', '/', uniqueString(parameters('virtualNetworkId')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.azurecr.io')]"
+            ],
+            "properties": {
+                "virtualNetwork": {
+                    "id": "[parameters('virtualNetworkId')]"
+                },
+                "registrationEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2021-05-01",
+            "name": "[concat(parameters('privateEndpointName'), '/', 'default')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', parameters('privateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones','privatelink.azurecr.io')]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-azurecr-io",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', 'privatelink.azurecr.io')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {
+        "acrResourceId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]"
+        },
+        "azureContainerRegistryName": {
+            "type": "string",
+            "value": "[parameters('acrName')]"
+        }
+    }
+}

@@ -1,0 +1,171 @@
+name: Deploy the Azure infrastructure for GitHub runners
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  azure-infrastructure-foundation:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+      containerRegistryName: ${{ steps.containerRegistry.outputs.azureContainerRegistryName }}
+      workspaceId: ${{ steps.logAnalyticsWorkspace.outputs.workspaceId }}
+      workspaceKey: ${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }}
+      virtualNetworkName: ${{ steps.virtualNetwork.outputs.virtualNetworkName }}
+      subnetName: ${{ steps.virtualNetwork.outputs.subnetName }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: 'feature/azure-infra-for-ghr'
+
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Resource Group
+        id: resourceGroup
+        with:
+          scope: subscription
+          region: westeurope
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          template: arm-templates/resource-group.template.json
+          parameters: arm-templates/resource-group.params.json
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Log Analytics Workspace
+        id: logAnalyticsWorkspace
+        with:
+          template: arm-templates/log-analytics-workspace.template.json
+          parameters: arm-templates/log-analytics-workspace.params.json
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Network Security Group
+        id: networkSecurityGroup
+        with:
+          template: arm-templates/network-security-group.template.json
+          parameters: arm-templates/network-security-group.params.json
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Virtual Network
+        id: virtualNetwork
+        with:
+          template: arm-templates/virtual-network.template.json
+          parameters: arm-templates/virtual-network.params.json networkSecurityGroupID=${{ steps.networkSecurityGroup.outputs.networkSecurityGroupID }}
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Azure Container Registry
+        id: containerRegistry
+        with:
+          template: arm-templates/container-registry.template.json
+          parameters: arm-templates/container-registry.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+
+  build-linux-github-runner-container-image:
+    runs-on: ubuntu-22.04
+    needs: azure-infrastructure-foundation
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+      
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - run: |
+          az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled true
+          az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Linux Container Image Build 
+        uses: docker/build-push-action@v3
+        with:
+          context: "{{defaultContext}}:container-image/linux"
+          push: true
+          tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
+
+  build-windows-github-runner-container-image:
+    runs-on: windows-latest
+    needs: azure-infrastructure-foundation
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - run: |
+          az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled true
+          az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
+
+      - run: |
+          docker build --tag ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows .\container-image\windows
+          docker push ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows
+
+  azure-infrastructure-continuation:
+    runs-on: ubuntu-22.04
+    needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout current repo
+        uses: actions/checkout@v3
+      
+      - uses: azure/login@v1
+        name: OIDC Login to Customer Tenant
+        with:         
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - run: |
+          az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled false
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Managed Environment
+        id: managedEnvironment
+        with:
+          template: arm-templates/managed-environment.template.json
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }}
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: Create the Container App
+        id: linuxContainerApp
+        with:
+          template: arm-templates/container-app.template.json
+          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }}
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}

@@ -1,0 +1,153 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedIdentityName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the managed identity."
+            }
+        },
+        "managedEnvironmentId": {
+            "type": "string",
+            "metadata": {
+                "description": "The managed environment id."
+            }
+        },
+        "containerAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the container app."
+            }
+        },
+        "containerRegistryName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the container registry."
+            }
+        },
+        "containerName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the container."
+            }
+        },
+        "containerImage": {
+            "type": "string",
+            "metadata": {
+                "description": "The container image."
+            }
+        },
+        "githubOwner": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the GitHub owner."
+            }
+        },
+        "githubRepository": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the GitHub repository."
+            }
+        },
+        "githubToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The GitHub token."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "containerRegistryServerName": "[concat(parameters('containerRegistryName'), '.azurecr.io')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "apiVersion": "2018-11-30",
+            "name": "[parameters('managedIdentityName')]",
+            "location": "[resourceGroup().location]"
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(resourceGroup().id)]",
+            "scope": "[resourceId('Microsoft.ContainerRegistry/registries',parameters('containerRegistryName'))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7f951dda-4ed3-4680-a7ca-43fe172d538d')]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')), '2018-11-30').principalId]"
+            }
+        },
+        {
+            "apiVersion": "2022-06-01-preview",
+            "name": "[parameters('containerAppName')]",
+            "type": "Microsoft.App/containerapps",
+            "kind": "containerapps",
+            "location": "[resourceGroup().location]",
+            "identity": {
+                "type": "userAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]": {}
+                }
+            },
+            "properties": {
+                "environmentId": "[parameters('managedEnvironmentId')]",
+                "configuration": {
+                    "registries": [
+                        {
+                            "identity": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}', parameters('managedIdentityName')))]",
+                            "server": "[variables('containerRegistryServerName')]"
+                        }
+                    ],
+                    "secrets": [
+                        {
+                            "name": "gh-owner",
+                            "value": "[parameters('githubOwner')]"
+                        },
+                        {
+                            "name": "gh-repository",
+                            "value": "[parameters('githubRepository')]"
+                        },
+                        {
+                            "name": "gh-token",
+                            "value": "[parameters('githubToken')]"
+                        }
+                    ],
+
+                    "activeRevisionsMode": "Single"
+                },
+                "template": {
+                    "containers": [
+                        {
+                            "name": "[parameters('containerName')]",
+                            "image": "[parameters('containerImage')]",
+                            "command": [],
+                            "resources": {
+                                "cpu": 1,
+                                "memory": "2Gi"
+                            },
+                            "env": [
+                                {
+                                    "name": "GH_OWNER",
+                                    "secretRef": "gh-owner"
+                                },
+                                {
+                                    "name": "GH_REPOSITORY",
+                                    "secretRef": "gh-repository"
+                                },
+                                {
+                                    "name": "GH_TOKEN",
+                                    "secretRef": "gh-token"
+                                }
+                            ]
+                        }
+                    ],
+                    "scale": {
+                        "minReplicas": 1
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

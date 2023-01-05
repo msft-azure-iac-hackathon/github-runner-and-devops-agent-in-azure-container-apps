@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "managedIdentityName": {
+            "value": "bgrozoiu-ghr-uai-02"
+        },
+        "managedEnvironmentId": {
+            "value": ""
+        },
+        "containerAppName": {
+            "value": "bgrozoiu-ghr-cap-02"
+        },
+        "containerRegistryName": {
+            "value": ""
+        },
+        "containerName":{
+            "value": "github-runner-linux"
+        },
+        "containerImage":{
+            "value": ""
+        },
+        "githubOwner":{
+            "value": ""
+        },
+        "githubRepository":{
+            "value": ""
+        },
+        "githubToken":{
+            "value": ""
+        }
+    }
+}

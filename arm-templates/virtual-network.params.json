@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "virtualNetworkName": {
+            "value": "bgrozoiu-ghr-vnt-02"
+        },
+        "virtualNetworkAddressPrefix": {
+            "value": "10.255.0.0/21"
+        },
+        "subnetName": {
+            "value": "bgrozoiu-ghr-snt-02"
+        },
+        "subnetAddressPrefix": {
+            "value": "10.255.0.0/21"
+        }
+    }
+}

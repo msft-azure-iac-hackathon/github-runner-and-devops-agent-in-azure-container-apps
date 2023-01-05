@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedEnvironmentName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Managed Environment."
+            }
+        },
+        "workspaceId": {
+            "type": "string",
+            "metadata": {
+                "description": "The resource ID of the Log Analytics workspace to which you would like to send Diagnostic Logs."
+            }
+        },
+        "workspaceKey": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The primary or secondary Connected Sources client authentication key for the Log Analytics workspace."
+            }
+        },
+        "virtualNetworkName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the virtual network to which you would like to integrate."
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "The resource ID of the subnet to which you would like to integrate."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2022-06-01-preview",
+            "name": "[parameters('managedEnvironmentName')]",
+            "type": "Microsoft.App/managedEnvironments",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "internalLoadBalancerEnabled": false,
+                "appLogsConfiguration": {
+                    "destination": "log-analytics",
+                    "logAnalyticsConfiguration": {
+                        "customerId": "[parameters('workspaceId')]",
+                        "sharedKey": "[parameters('workspaceKey')]"
+                    }
+                },
+                "vnetConfiguration": {
+                    "infrastructureSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+                    "internal": true
+                },
+                "zoneRedundant": false
+            },
+            "sku": {
+                "name": "Consumption"
+            }
+        }
+    ],
+    "outputs": {
+        "managedEnvironmentId": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.App/managedEnvironments', parameters('managedEnvironmentName'))]"
+        }
+    }
+}
