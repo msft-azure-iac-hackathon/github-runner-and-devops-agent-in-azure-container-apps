@@ -20,7 +20,13 @@
                 "description": "The primary or secondary Connected Sources client authentication key for the Log Analytics workspace."
             }
         },
-        "subnetID": {
+        "virtualNetworkName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the virtual network to which you would like to integrate."
+            }
+        },
+        "subnetName": {
             "type": "string",
             "metadata": {
                 "description": "The resource ID of the subnet to which you would like to integrate."
@@ -45,7 +51,7 @@
                     }
                 },
                 "vnetConfiguration": {
-                    "infrastructureSubnetId": "[parameters('subnetID')]",
+                    "infrastructureSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
                     "internal": true
                 },
                 "zoneRedundant": false

@@ -11,7 +11,10 @@
         "workspaceKey": {
             "value": ""
         },
-        "subnetID": {
+        "virtualNetworkName": {
+            "value": ""
+        },
+        "subnetName": {
             "value": ""
         }
     }
