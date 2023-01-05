@@ -92,6 +92,7 @@ jobs:
           enable-AzPSSession: true
 
       - run: |
+          az acr update --name bgrozoiughracr02 --public-network-enabled true
           az acr login --name bgrozoiughracr02
 
       - name: Set up QEMU
@@ -126,6 +127,7 @@ jobs:
           enable-AzPSSession: true
 
       - run: |
+          az acr update --name bgrozoiughracr02 --public-network-enabled true
           az acr login --name bgrozoiughracr02
 
       - run: |
