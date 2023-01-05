@@ -13,7 +13,6 @@ jobs:
     outputs:
       resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
       containerRegistryName: ${{ steps.containerRegistry.outputs.azureContainerRegistryName }}
-      containerRegistryResourceId: ${{ steps.containerRegistry.outputs.acrResourceId }}
       workspaceId: ${{ steps.logAnalyticsWorkspace.outputs.workspaceId }}
       workspaceKey: ${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }}
       virtualNetworkName: ${{ steps.virtualNetwork.outputs.virtualNetworkName }}
@@ -170,5 +169,5 @@ jobs:
         id: linuxContainerApp
         with:
           template: arm-templates/container-app.template.json
-          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryResourceId=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryResourceId }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }}
+          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
