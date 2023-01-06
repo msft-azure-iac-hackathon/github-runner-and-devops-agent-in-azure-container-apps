@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 
 #input GitHub runner version argument
 ENV DEBIAN_FRONTEND=noninteractive
+ARG PAT=""
 
 LABEL Author="Bogdan Grozoiu"
 LABEL BaseImage="ubuntu:22.04"
@@ -28,9 +29,9 @@ RUN wget -q 'https://packages.microsoft.com/config/ubuntu/22.04/packages-microso
 RUN pwsh -Command "Install-Module -Name Az -AllowClobber -Scope AllUsers -Force"
 
 # cd into the user directory, download and unzip the github actions runner
-RUN RUNNER_VERSION=$(curl 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name[1:]') \
+RUN RUNNER_VERSION=$(curl -H "Authorization: token $PAT" 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name[1:]') \
     && cd /home/docker && mkdir actions-runner && cd actions-runner \
-    && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
+    && curl -H "Authorization: token $PAT" -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
     && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
 
 # install some additional dependencies

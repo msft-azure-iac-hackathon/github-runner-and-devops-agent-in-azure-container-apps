@@ -3,6 +3,8 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 LABEL Author="Bogdan Grozoiu"
 LABEL BaseImage="servercore:ltsc2022"
 
+ARG PAT=""
+
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $verbosePreference='Continue';"]
 
 RUN Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
@@ -18,8 +20,8 @@ SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference
 
 RUN New-Item -Type Directory -Name actions-runner; \
     Set-Location actions-runner; \
-    $LatestRunnerVersion = (((Invoke-WebRequest -Uri 'https://api.github.com/repos/actions/runner/releases/latest').Content | ConvertFrom-Json).tag_name).replace('v',''); \
-    Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$LatestRunnerVersion/actions-runner-win-x64-$LatestRunnerVersion.zip" -OutFile "actions-runner.zip"; \
+    $LatestRunnerVersion = (((Invoke-WebRequest -Uri 'https://api.github.com/repos/actions/runner/releases/latest' -Headers @{Accept = 'application/vnd.github.v3+json'; Authorization = "token $PAT"}).Content | ConvertFrom-Json).tag_name).replace('v',''); \
+    Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$LatestRunnerVersion/actions-runner-win-x64-$LatestRunnerVersion.zip" -Headers @{Accept = 'application/vnd.github.v3+json' ; Authorization = "token $PAT"} -OutFile "actions-runner.zip"; \
     Expand-Archive -Path ".\\actions-runner.zip" -DestinationPath '.'; \
     Remove-Item -Path ".\\actions-runner.zip"
 

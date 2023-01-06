@@ -104,6 +104,7 @@ jobs:
           context: "{{defaultContext}}:container-image/linux"
           push: true
           tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
+          build-args: PAT=${{ secrets.GH_PAT }}
 
   build-windows-github-runner-container-image:
     runs-on: windows-latest
@@ -128,7 +129,7 @@ jobs:
           az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
 
       - run: |
-          docker build --tag ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows .\container-image\windows
+          docker build  --build-arg PAT=${{ secrets.GH_PAT }} --tag ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows .\container-image\windows
           docker push ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows
 
   azure-infrastructure-continuation:
