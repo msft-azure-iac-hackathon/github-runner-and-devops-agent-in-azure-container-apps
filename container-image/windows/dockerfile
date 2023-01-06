@@ -20,8 +20,9 @@ SHELL ["pwsh", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference
 
 RUN New-Item -Type Directory -Name actions-runner; \
     Set-Location actions-runner; \
-    $LatestRunnerVersion = (((Invoke-WebRequest -Uri 'https://api.github.com/repos/actions/runner/releases/latest' -Headers @{Accept = 'application/vnd.github.v3+json'; Authorization = "token $PAT"}).Content | ConvertFrom-Json).tag_name).replace('v',''); \
-    Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$LatestRunnerVersion/actions-runner-win-x64-$LatestRunnerVersion.zip" -Headers @{Accept = 'application/vnd.github.v3+json' ; Authorization = "token $PAT"} -OutFile "actions-runner.zip"; \
+    $headers = @{'Authorization' = $('token ' + $env:PAT)} ; \
+    $LatestRunnerVersion = (((Invoke-WebRequest -Uri 'https://api.github.com/repos/actions/runner/releases/latest' -Headers $headers ).Content | ConvertFrom-Json).tag_name).replace('v',''); \
+    Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$LatestRunnerVersion/actions-runner-win-x64-$LatestRunnerVersion.zip" -Headers $headers -OutFile "actions-runner.zip"; \
     Expand-Archive -Path ".\\actions-runner.zip" -DestinationPath '.'; \
     Remove-Item -Path ".\\actions-runner.zip"
 
