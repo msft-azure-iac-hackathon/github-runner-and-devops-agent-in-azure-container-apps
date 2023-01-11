@@ -55,6 +55,12 @@
             "metadata": {
                 "description": "The GitHub token."
             }
+        },
+        "minimumReplicas": {
+            "type": "int",
+            "metadata": {
+                "description": "The minimum number of replicas."
+            }
         }
     },
     "functions": [],
@@ -150,7 +156,7 @@
                         }
                     ],
                     "scale": {
-                        "minReplicas": 1
+                        "minReplicas": "[parameters('minimumReplicas')]"
                     }
                 }
             }
