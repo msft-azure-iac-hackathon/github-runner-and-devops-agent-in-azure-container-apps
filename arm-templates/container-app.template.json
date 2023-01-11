@@ -72,6 +72,9 @@
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
             "name": "[guid(resourceGroup().id)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
+            ],
             "scope": "[resourceId('Microsoft.ContainerRegistry/registries',parameters('containerRegistryName'))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7f951dda-4ed3-4680-a7ca-43fe172d538d')]",
@@ -81,6 +84,10 @@
         {
             "apiVersion": "2022-06-01-preview",
             "name": "[parameters('containerAppName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]",
+                "[resourceId('Microsoft.Authorization/roleAssignments', guid(resourceGroup().id))]"
+            ],
             "type": "Microsoft.App/containerapps",
             "kind": "containerapps",
             "location": "[resourceGroup().location]",
