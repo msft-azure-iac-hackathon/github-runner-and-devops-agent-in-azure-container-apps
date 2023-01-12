@@ -28,6 +28,9 @@
         },
         "githubToken":{
             "value": ""
+        },
+        "minimumReplicas": {
+            "value": 1
         }
     }
 }
