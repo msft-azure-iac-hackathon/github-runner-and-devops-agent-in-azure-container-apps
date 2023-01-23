@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedIdentityName": {
-            "value": "bgrozoiu-ghr-uai-02"
+            "value": "id-p-we-ghr-01"
         },
         "managedEnvironmentId": {
             "value": ""
         },
         "containerAppName": {
-            "value": "bgrozoiu-ghr-cap-02"
+            "value": "aca-p-we-ghr-01"
         },
         "containerRegistryName": {
             "value": ""

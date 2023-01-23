@@ -3,16 +3,16 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "virtualNetworkName": {
-            "value": "bgrozoiu-ghr-vnt-02"
+            "value": "vnet-p-we-ghr-01"
         },
         "virtualNetworkAddressPrefix": {
-            "value": "10.255.0.0/21"
+            "value": "10.1.0.0/21"
         },
         "subnetName": {
-            "value": "bgrozoiu-ghr-snt-02"
+            "value": "snet-p-we-ghr-01"
         },
         "subnetAddressPrefix": {
-            "value": "10.255.0.0/21"
+            "value": "10.1.0.0/21"
         }
     }
 }

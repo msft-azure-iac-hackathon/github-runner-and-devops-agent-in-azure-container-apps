@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "networkSecurityGroupName": {
-            "value": "bgrozoiu-ghr-nsg-02"
+            "value": "nsg-p-we-ghr-01"
         }
     }
 }

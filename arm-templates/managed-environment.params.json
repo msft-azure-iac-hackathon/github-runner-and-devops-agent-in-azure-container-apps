@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedEnvironmentName": {
-            "value": "bgrozoiu-ghr-cae-02"
+            "value": "me-p-we-ghr-01"
         },
         "workspaceId": {
             "value": ""

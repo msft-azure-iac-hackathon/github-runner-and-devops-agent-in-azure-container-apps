@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "acrName": {
-            "value": "bgrozoiughracr02"
+            "value": "crpweghr01"
         },
         "privateEndpointName":{
-            "value": "bgrozoiu-ghr-acr-pe-02"
+            "value": "pe-p-we-ghr-01"
         },
         "customNetworkInterfaceName":{
-            "value": "bgrozoiu-ghr-acr-nic-02"
+            "value": "nic-p-we-ghr-01"
         },
         "virtualNetworkId":{
             "value":""
