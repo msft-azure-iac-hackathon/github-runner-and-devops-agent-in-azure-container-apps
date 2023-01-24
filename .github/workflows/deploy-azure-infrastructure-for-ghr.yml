@@ -153,6 +153,11 @@ jobs:
       - run: |
           az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled false
       
+      - run: |
+          az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
+          az provider register -n 'Microsoft.App'
+          az provider register -n 'Microsoft.ContainerService'
+      
       - uses: azure/arm-deploy@v1
         name: Create the Managed Environment
         id: managedEnvironment
