@@ -41,7 +41,7 @@ RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependenci
 ADD bootstrap/start.sh start.sh
 
 # make the script executable
-RUN chmod +x start.sh
+RUN chmod u+x start.sh
 
 # set the user to "docker" so all subsequent commands are run as the docker user
 USER docker
