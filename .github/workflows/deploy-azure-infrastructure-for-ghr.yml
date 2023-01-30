@@ -1,7 +1,7 @@
 name: Deploy the Azure infrastructure for GitHub runners
 on:
   push:
-    branches: [ main ]
+    branches: [ candidate-fix/container-app-exit-code-137 ]
   workflow_dispatch:
 
 jobs:
@@ -109,6 +109,7 @@ jobs:
   build-windows-github-runner-container-image:
     runs-on: windows-latest
     needs: azure-infrastructure-foundation
+    if: false
     permissions:
       contents: read
       id-token: write
