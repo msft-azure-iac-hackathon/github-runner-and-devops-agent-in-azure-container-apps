@@ -18,7 +18,7 @@ echo https://github.com/${GH_OWNER}/${GH_REPOSITORY}
 ./config.sh --unattended --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
     --token ${REG_TOKEN} \
     --name ${RUNNER_NAME} \
-    --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)"
+    --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)" \
     --work _work/$(hostname)
 
 cleanup() {
