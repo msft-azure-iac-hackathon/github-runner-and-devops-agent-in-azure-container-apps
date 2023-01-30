@@ -10,8 +10,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v3
-
       - run: |
           df -h
           curl https://releases.ubuntu.com/22.04.1/ubuntu-22.04.1-live-server-amd64.iso -o file.iso
