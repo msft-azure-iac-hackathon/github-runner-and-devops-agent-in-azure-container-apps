@@ -19,7 +19,7 @@ jobs:
       subnetName: ${{ steps.virtualNetwork.outputs.subnetName }}
       storageAccountName: ${{ steps.storageAccount.outputs.storageAccountName }}
       storageAccountKey: ${{ steps.storageAccount.outputs.storageAccountKey }}
-      storageAccontFileShareName: ${{ steps.storageAccount.outputs.storageAccontFileShareName }}
+      storageAccountFileShareName: ${{ steps.storageAccount.outputs.storageAccountFileShareName }}
     steps:
       - uses: actions/checkout@v3
 
