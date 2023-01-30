@@ -11,9 +11,15 @@ RUNNER_NAME="${GH_REPOSITORY}-${RUNNER_SUFFIX}"
 REG_TOKEN=$(curl -sX POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GH_TOKEN}" https://api.github.com/repos/${GH_OWNER}/${GH_REPOSITORY}/actions/runners/registration-token | jq .token --raw-output)
 
 cd /home/docker/actions-runner
+mkdir _work
+mkdir _work/$(hostname)
 echo "Configuring runner..."
 echo https://github.com/${GH_OWNER}/${GH_REPOSITORY}
-./config.sh --unattended --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} --token ${REG_TOKEN} --name ${RUNNER_NAME} --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)"
+./config.sh --unattended --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
+    --token ${REG_TOKEN} \
+    --name ${RUNNER_NAME} \
+    --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)"
+    --work ${_work/$(hostname)}
 
 cleanup() {
     echo "Removing runner..."

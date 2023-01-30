@@ -14,6 +14,12 @@
         "containerRegistryName": {
             "value": ""
         },
+        "storageAccountName": {
+            "value": "stapweghr01"
+        },
+        "storageAccountFileShareName":{
+            "value": "ghr"
+        },
         "containerName":{
             "value": "github-runner-linux"
         },
