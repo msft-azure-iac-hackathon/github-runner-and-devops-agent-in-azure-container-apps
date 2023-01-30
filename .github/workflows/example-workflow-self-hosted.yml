@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  azure-infrastructure-foundation:
+  demo-self-hosted:
     runs-on: [self-hosted, linux]
 
     steps:
