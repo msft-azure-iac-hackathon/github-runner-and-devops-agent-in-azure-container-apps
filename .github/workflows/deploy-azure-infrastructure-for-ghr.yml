@@ -17,6 +17,9 @@ jobs:
       workspaceKey: ${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }}
       virtualNetworkName: ${{ steps.virtualNetwork.outputs.virtualNetworkName }}
       subnetName: ${{ steps.virtualNetwork.outputs.subnetName }}
+      storageAccountName: ${{ steps.storageAccount.outputs.storageAccountName }}
+      storageAccountKey: ${{ steps.storageAccount.outputs.storageAccountKey }}
+      storageAccontFileShareName: ${{ steps.storageAccount.outputs.storageAccontFileShareName }}
     steps:
       - uses: actions/checkout@v3
 
@@ -69,6 +72,14 @@ jobs:
           template: arm-templates/container-registry.template.json
           parameters: arm-templates/container-registry.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Storage Account
+        id: storageAccount
+        with:
+          template: arm-templates/storage-account.template.json
+          parameters: arm-templates/storage-account.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
   build-linux-github-runner-container-image:
     runs-on: ubuntu-22.04
@@ -158,13 +169,13 @@ jobs:
           az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
           az provider register -n 'Microsoft.App'
           az provider register -n 'Microsoft.ContainerService'
-      
+
       - uses: azure/arm-deploy@v1
         name: Create the Managed Environment
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }}
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountKey=${{needs.azure-infrastructure-foundation.outputs.storageAccountKey}} storageAccontFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccontFileShareName}}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
