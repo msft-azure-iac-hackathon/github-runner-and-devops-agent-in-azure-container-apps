@@ -84,7 +84,7 @@ jobs:
   build-linux-github-runner-container-image:
     runs-on: ubuntu-22.04
     needs: azure-infrastructure-foundation
-    if: false
+    if: true
     permissions:
       contents: read
       id-token: write
