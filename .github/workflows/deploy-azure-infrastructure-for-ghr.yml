@@ -176,7 +176,7 @@ jobs:
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountKey=${{needs.azure-infrastructure-foundation.outputs.storageAccountKey}} storageAccontFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccontFileShareName}}
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountKey=${{needs.azure-infrastructure-foundation.outputs.storageAccountKey}} storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1

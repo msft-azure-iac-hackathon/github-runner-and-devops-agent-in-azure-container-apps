@@ -23,7 +23,7 @@
         "storageAccountKey": {
             "value": ""
         },
-        "storageAccontFileShareName": {
+        "storageAccountFileShareName": {
             "value": ""
         }
     }

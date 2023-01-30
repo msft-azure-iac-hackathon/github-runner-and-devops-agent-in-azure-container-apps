@@ -44,7 +44,7 @@
                 "description": "The primary or secondary key of the storage account to which you would like to integrate."
             }
         },
-        "storageAccontFileShareName": {
+        "storageAccountFileShareName": {
             "type": "string",
             "metadata": {
                 "description": "The name of the file share to which you would like to integrate."
@@ -81,13 +81,13 @@
         {
             "type": "Microsoft.App/managedEnvironments/storages",
             "apiVersion": "2022-06-01-preview",
-            "name": "[concat(parameters('managedEnvironmentName'), '/ghr')]",
+            "name": "[concat(parameters('managedEnvironmentName'), '/', parameters('storageAccountFileShareName'))]",
             "properties": {
                 "azureFile": {
                     "accessMode": "ReadWrite",
                     "accountKey": "[parameters('storageAccountKey')]",
                     "accountName": "[parameters('storageAccountName')]",
-                    "shareName": "[parameters('storageAccontFileShareName')]"
+                    "shareName": "[parameters('storageAccountFileShareName')]"
                 }
             }
         }
