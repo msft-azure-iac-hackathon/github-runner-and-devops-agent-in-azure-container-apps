@@ -24,6 +24,8 @@ echo https://github.com/${GH_OWNER}/${GH_REPOSITORY}
 cleanup() {
     echo "Removing runner..."
     ./config.sh remove --token ${REG_TOKEN}
+    echo "Removing work directory..."
+    rm -rf ${_work/$(hostname)}
 }
 
 trap 'cleanup; exit 130' INT
