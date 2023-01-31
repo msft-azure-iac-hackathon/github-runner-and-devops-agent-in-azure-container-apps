@@ -1,0 +1,11 @@
+name: Demo
+on:
+  push:
+    branches: [ candidate-fix/container-app-exit-code-137 ]
+  workflow_dispatch:
+
+jobs:
+  demo-self-hosted-execute-perms:
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v3

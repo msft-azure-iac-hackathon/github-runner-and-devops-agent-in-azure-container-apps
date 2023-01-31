@@ -1,7 +1,7 @@
 name: Deploy the Azure infrastructure for GitHub runners
 on:
   push:
-    branches: [ candidate-fix/container-app-exit-code-137 ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
