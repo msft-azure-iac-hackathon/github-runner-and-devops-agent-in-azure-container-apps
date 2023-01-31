@@ -199,6 +199,9 @@ jobs:
           df -h
           tar -czvf file.tar.gz file.iso
           df -h
+          rm -f file.iso
+          rm -f file.tar.gz
+          df -h
 
   demo-self-hosted-execute-perms:
     needs: [demo-self-hosted-large-file]
