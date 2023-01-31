@@ -8,6 +8,9 @@ jobs:
   demo-self-hosted-execute-perms:
     runs-on: [self-hosted, linux]
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: candidate-fix/container-app-exit-code-137
+      - run: |
+          df -h
+          curl https://releases.ubuntu.com/22.04.1/ubuntu-22.04.1-live-server-amd64.iso -o file.iso
+          df -h
+          tar -czvf file.tar.gz file.iso
+          df -h
