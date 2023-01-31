@@ -9,7 +9,7 @@ LABEL Author="Bogdan Grozoiu"
 LABEL BaseImage="ubuntu:22.04"
 
 # update the base packages + add a non-sudo user
-RUN apt-get update -y && apt-get upgrade -y && useradd -m docker
+RUN apt-get update -y && apt-get upgrade -y && useradd -m docker -g root
 
 # install the packages and dependencies along with jq so we can parse JSON (add additional packages as necessary)
 RUN apt-get install -y --no-install-recommends \
@@ -41,7 +41,7 @@ RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependenci
 ADD bootstrap/start.sh start.sh
 
 # make the script executable
-RUN chmod u+x start.sh
+RUN chmod +x start.sh
 
 # set the user to "docker" so all subsequent commands are run as the docker user
 USER docker
