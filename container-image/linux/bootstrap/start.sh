@@ -9,8 +9,11 @@ RUNNER_NAME=$(hostname)
 REG_TOKEN=$(curl -sX POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GH_TOKEN}" https://api.github.com/repos/${GH_OWNER}/${GH_REPOSITORY}/actions/runners/registration-token | jq .token --raw-output)
 
 cd /home/docker/actions-runner
+chmod +x ./run.sh
+
 mkdir _work
 mkdir _work/$(hostname)
+
 echo "Configuring runner..."
 echo https://github.com/${GH_OWNER}/${GH_REPOSITORY}
 ./config.sh --unattended --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
@@ -29,4 +32,5 @@ cleanup() {
 trap 'cleanup; exit 130' INT
 trap 'cleanup; exit 143' TERM
 
+echo "Starting runner..."
 ./run.sh & wait $!
