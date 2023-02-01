@@ -181,7 +181,7 @@
                             ],
                             "volumeMounts": [
                                 {
-                                    "mountPath": "/home/docker/actions-runner/_work",
+                                    "mountPath": "/ghrunner/_work",
                                     "volumeName": "azure-files-volume"
                                 }
                             ]
