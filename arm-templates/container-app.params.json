@@ -11,6 +11,12 @@
         "containerAppName": {
             "value": "aca-p-we-ghr-01"
         },
+        "containerAppCPU": {
+            "value": "2"
+        },
+        "containerAppMemory": {
+            "value": "4Gi"
+        },
         "containerRegistryName": {
             "value": ""
         },

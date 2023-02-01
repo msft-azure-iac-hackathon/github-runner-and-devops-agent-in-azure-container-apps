@@ -20,6 +20,18 @@
                 "description": "The name of the container app."
             }
         },
+        "containerAppCPU": {
+            "type": "string",
+            "metadata": {
+                "description": "The number of CPU cores."
+            }
+        },
+        "containerAppMemory": {
+            "type": "string",
+            "metadata": {
+                "description": "The number of RAM size in GB."
+            }
+        },
         "containerRegistryName": {
             "type": "string",
             "metadata": {
@@ -162,8 +174,8 @@
                             "image": "[parameters('containerImage')]",
                             "command": [],
                             "resources": {
-                                "cpu": 1,
-                                "memory": "2Gi"
+                                "cpu": "[parameters('containerAppCPU')]",
+                                "memory": "[parameters('containerAppMemory')]"
                             },
                             "env": [
                                 {
