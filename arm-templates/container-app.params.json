@@ -15,7 +15,7 @@
             "value": "2"
         },
         "containerAppMemory": {
-            "value": "4Gi"
+            "value": "2Gi"
         },
         "containerRegistryName": {
             "value": ""
@@ -43,6 +43,9 @@
         },
         "minimumReplicas": {
             "value": 1
+        },
+        "revisionSuffix":{
+            "value": ""
         }
     }
 }
