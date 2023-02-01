@@ -1,7 +1,7 @@
 name: Deploy the Azure infrastructure for GitHub runners
 on:
   push:
-    branches: [ candidate-fix/container-app-exit-code-137 ]
+    branches: [ main, candidate-fix/* ]
   workflow_dispatch:
 
 jobs:
@@ -186,27 +186,3 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
-
-  demo-self-hosted-large-file:
-    needs: [azure-infrastructure-continuation]
-    runs-on: [self-hosted, linux]
-    permissions:
-      contents: read
-    steps:
-      - run: |
-          df -h
-          curl https://releases.ubuntu.com/22.04.1/ubuntu-22.04.1-live-server-amd64.iso -o file.iso
-          df -h
-          tar -czvf file.tar.gz file.iso
-          df -h
-          rm -f file.iso
-          rm -f file.tar.gz
-          df -h
-
-  demo-self-hosted-execute-perms:
-    needs: [demo-self-hosted-large-file]
-    runs-on: [self-hosted, linux]
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
