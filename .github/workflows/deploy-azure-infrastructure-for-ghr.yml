@@ -113,7 +113,7 @@ jobs:
       - name: Linux Container Image Build 
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}:container-image/linux"
+          context: "{{defaultContext}}:container-image/linux/github-runner"
           push: true
           tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
           build-args: PAT=${{ secrets.GH_PAT }}
