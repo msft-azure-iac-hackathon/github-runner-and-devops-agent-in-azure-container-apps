@@ -12,7 +12,7 @@
             "value": "aca-p-we-ghr-01"
         },
         "containerAppCPU": {
-            "value": "2"
+            "value": "1"
         },
         "containerAppMemory": {
             "value": "2Gi"
