@@ -1,7 +1,7 @@
 name: Deploy the Azure infrastructure for GitHub runners
 on:
   push:
-    branches: [ main ]
+    branches: [ main, candidate-fix/* ]
   workflow_dispatch:
 
 jobs:
@@ -17,6 +17,9 @@ jobs:
       workspaceKey: ${{ steps.logAnalyticsWorkspace.outputs.workspaceKey }}
       virtualNetworkName: ${{ steps.virtualNetwork.outputs.virtualNetworkName }}
       subnetName: ${{ steps.virtualNetwork.outputs.subnetName }}
+      storageAccountName: ${{ steps.storageAccount.outputs.storageAccountName }}
+      storageAccountKey: ${{ steps.storageAccount.outputs.storageAccountKey }}
+      storageAccountFileShareName: ${{ steps.storageAccount.outputs.storageAccountFileShareName }}
     steps:
       - uses: actions/checkout@v3
 
@@ -69,10 +72,19 @@ jobs:
           template: arm-templates/container-registry.template.json
           parameters: arm-templates/container-registry.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
+      
+      - uses: azure/arm-deploy@v1
+        name: Create the Storage Account
+        id: storageAccount
+        with:
+          template: arm-templates/storage-account.template.json
+          parameters: arm-templates/storage-account.params.json virtualNetworkId=${{ steps.virtualNetwork.outputs.virtualNetworkID }} subnetID=${{ steps.virtualNetwork.outputs.subnetID }}
+          resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
   build-linux-github-runner-container-image:
     runs-on: ubuntu-22.04
     needs: azure-infrastructure-foundation
+    if: true
     permissions:
       contents: read
       id-token: write
@@ -101,7 +113,7 @@ jobs:
       - name: Linux Container Image Build 
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}:container-image/linux"
+          context: "{{defaultContext}}:container-image/linux/github-runner"
           push: true
           tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
           build-args: PAT=${{ secrets.GH_PAT }}
@@ -109,6 +121,7 @@ jobs:
   build-windows-github-runner-container-image:
     runs-on: windows-latest
     needs: azure-infrastructure-foundation
+    if: false
     permissions:
       contents: read
       id-token: write
@@ -134,7 +147,7 @@ jobs:
 
   azure-infrastructure-continuation:
     runs-on: ubuntu-22.04
-    needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-windows-github-runner-container-image]
+    needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image]
     permissions:
       contents: read
       id-token: write
@@ -157,13 +170,13 @@ jobs:
           az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
           az provider register -n 'Microsoft.App'
           az provider register -n 'Microsoft.ContainerService'
-      
+
       - uses: azure/arm-deploy@v1
         name: Create the Managed Environment
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }}
+          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountKey=${{needs.azure-infrastructure-foundation.outputs.storageAccountKey}} storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
@@ -171,5 +184,5 @@ jobs:
         id: linuxContainerApp
         with:
           template: arm-templates/container-app.template.json
-          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }}
+          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} revisionSuffix=${{ github.run_id }}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}

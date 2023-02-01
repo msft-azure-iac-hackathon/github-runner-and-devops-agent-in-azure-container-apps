@@ -31,6 +31,24 @@
             "metadata": {
                 "description": "The resource ID of the subnet to which you would like to integrate."
             }
+        },
+        "storageAccountName":{
+            "type": "string",
+            "metadata": {
+                "description": "The name of the storage account to which you would like to integrate."
+            }
+        },
+        "storageAccountKey":{
+            "type": "securestring",
+            "metadata": {
+                "description": "The primary or secondary key of the storage account to which you would like to integrate."
+            }
+        },
+        "storageAccountFileShareName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the file share to which you would like to integrate."
+            }
         }
     },
     "functions": [],
@@ -58,6 +76,19 @@
             },
             "sku": {
                 "name": "Consumption"
+            }
+        },
+        {
+            "type": "Microsoft.App/managedEnvironments/storages",
+            "apiVersion": "2022-06-01-preview",
+            "name": "[concat(parameters('managedEnvironmentName'), '/', parameters('storageAccountFileShareName'))]",
+            "properties": {
+                "azureFile": {
+                    "accessMode": "ReadWrite",
+                    "accountKey": "[parameters('storageAccountKey')]",
+                    "accountName": "[parameters('storageAccountName')]",
+                    "shareName": "[parameters('storageAccountFileShareName')]"
+                }
             }
         }
     ],

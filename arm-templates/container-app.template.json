@@ -20,10 +20,34 @@
                 "description": "The name of the container app."
             }
         },
+        "containerAppCPU": {
+            "type": "string",
+            "metadata": {
+                "description": "The number of CPU cores."
+            }
+        },
+        "containerAppMemory": {
+            "type": "string",
+            "metadata": {
+                "description": "The number of RAM size in GB."
+            }
+        },
         "containerRegistryName": {
             "type": "string",
             "metadata": {
                 "description": "The name of the container registry."
+            }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the storage account."
+            }
+        },
+        "storageAccountFileShareName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the storage account file share."
             }
         },
         "containerName": {
@@ -61,6 +85,12 @@
             "metadata": {
                 "description": "The minimum number of replicas."
             }
+        },
+        "revisionSuffix": {
+            "type": "string",
+            "metadata": {
+                "description": "The revision suffix."
+            }
         }
     },
     "functions": [],
@@ -77,13 +107,27 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[guid(resourceGroup().id)]",
+            "name": "[guid(resourceGroup().id, parameters('containerRegistryName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
             ],
             "scope": "[resourceId('Microsoft.ContainerRegistry/registries',parameters('containerRegistryName'))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7f951dda-4ed3-4680-a7ca-43fe172d538d')]",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')), '2018-11-30').principalId]",
+                "principalType": "ServicePrincipal"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2022-04-01",
+            "name": "[guid(resourceGroup().id, parameters('storageAccountName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
+            ],
+            "scope": "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a7264617-510b-434b-a828-9731dc254ea7')]",
                 "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')), '2018-11-30').principalId]",
                 "principalType": "ServicePrincipal"
             }
@@ -130,14 +174,15 @@
                     "activeRevisionsMode": "Single"
                 },
                 "template": {
+                    "revisionSuffix": "[parameters('revisionSuffix')]",
                     "containers": [
                         {
                             "name": "[parameters('containerName')]",
                             "image": "[parameters('containerImage')]",
                             "command": [],
                             "resources": {
-                                "cpu": 1,
-                                "memory": "2Gi"
+                                "cpu": "[parameters('containerAppCPU')]",
+                                "memory": "[parameters('containerAppMemory')]"
                             },
                             "env": [
                                 {
@@ -152,12 +197,25 @@
                                     "name": "GH_TOKEN",
                                     "secretRef": "gh-token"
                                 }
+                            ],
+                            "volumeMounts": [
+                                {
+                                    "mountPath": "/ghrunner/_work",
+                                    "volumeName": "azure-files-volume"
+                                }
                             ]
                         }
                     ],
                     "scale": {
                         "minReplicas": "[parameters('minimumReplicas')]"
-                    }
+                    },
+                    "volumes": [
+                        {
+                            "name": "azure-files-volume",
+                            "storageName": "[parameters('storageAccountFileShareName')]",
+                            "storageType": "AzureFile"
+                        }
+                    ]
                 }
             }
         }

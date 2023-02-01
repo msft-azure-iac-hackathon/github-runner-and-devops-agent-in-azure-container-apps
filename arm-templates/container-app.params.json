@@ -11,8 +11,20 @@
         "containerAppName": {
             "value": "aca-p-we-ghr-01"
         },
+        "containerAppCPU": {
+            "value": "1"
+        },
+        "containerAppMemory": {
+            "value": "2Gi"
+        },
         "containerRegistryName": {
             "value": ""
+        },
+        "storageAccountName": {
+            "value": "stapweghr01"
+        },
+        "storageAccountFileShareName":{
+            "value": "ghr"
         },
         "containerName":{
             "value": "github-runner-linux"
@@ -31,6 +43,9 @@
         },
         "minimumReplicas": {
             "value": 1
+        },
+        "revisionSuffix":{
+            "value": ""
         }
     }
 }

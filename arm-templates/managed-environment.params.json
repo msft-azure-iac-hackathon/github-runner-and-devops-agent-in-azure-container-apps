@@ -16,6 +16,15 @@
         },
         "subnetName": {
             "value": ""
+        },
+        "storageAccountName": {
+            "value": ""
+        },
+        "storageAccountKey": {
+            "value": ""
+        },
+        "storageAccountFileShareName": {
+            "value": ""
         }
     }
 }
