@@ -62,35 +62,39 @@
                 "description": "The container image."
             }
         },
-        "githubOwner": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the GitHub owner."
-            }
-        },
-        "githubRepository": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the GitHub repository."
-            }
-        },
-        "githubToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "The GitHub token."
-            }
-        },
         "minimumReplicas": {
             "type": "int",
             "metadata": {
                 "description": "The minimum number of replicas."
-            }
+            },
+            "defaultValue": 1
         },
         "revisionSuffix": {
             "type": "string",
             "metadata": {
                 "description": "The revision suffix."
             }
+        },
+        "secret1name": {
+            "type": "string"
+        },
+        "secret1value": {
+            "type": "string"
+        },
+        "secret2name": {
+            "type": "string"
+        },
+        "secret2value": {
+            "type": "string"
+        },
+        "secret3name": {
+            "type": "string"
+        },
+        "secret3value": {
+            "type": "securestring"
+        },
+        "mountPath": {
+            "type": "string"
         }
     },
     "functions": [],
@@ -158,19 +162,18 @@
                     ],
                     "secrets": [
                         {
-                            "name": "gh-owner",
-                            "value": "[parameters('githubOwner')]"
+                            "name": "[toLower(replace(parameters('secret1name'),'_','-'))]",
+                            "value": "[parameters('secret1value')]"
                         },
                         {
-                            "name": "gh-repository",
-                            "value": "[parameters('githubRepository')]"
+                            "name": "[toLower(replace(parameters('secret2name'),'_','-'))]",
+                            "value": "[parameters('secret2value')]"
                         },
                         {
-                            "name": "gh-token",
-                            "value": "[parameters('githubToken')]"
+                            "name": "[toLower(replace(parameters('secret3name'),'_','-'))]",
+                            "value": "[parameters('secret3value')]"
                         }
                     ],
-
                     "activeRevisionsMode": "Single"
                 },
                 "template": {
@@ -186,21 +189,21 @@
                             },
                             "env": [
                                 {
-                                    "name": "GH_OWNER",
-                                    "secretRef": "gh-owner"
+                                    "name": "[parameters('secret1name')]",
+                                    "secretRef": "[toLower(replace(parameters('secret1name'),'_','-'))]"
                                 },
                                 {
-                                    "name": "GH_REPOSITORY",
-                                    "secretRef": "gh-repository"
+                                    "name": "[parameters('secret2name')]",
+                                    "secretRef": "[toLower(replace(parameters('secret2name'),'_','-'))]"
                                 },
                                 {
-                                    "name": "GH_TOKEN",
-                                    "secretRef": "gh-token"
+                                    "name": "[parameters('secret3name')]",
+                                    "secretRef": "[toLower(replace(parameters('secret3name'),'_','-'))]"
                                 }
                             ],
                             "volumeMounts": [
                                 {
-                                    "mountPath": "/ghrunner/_work",
+                                    "mountPath": "[parameters('mountPath')]",
                                     "volumeName": "azure-files-volume"
                                 }
                             ]

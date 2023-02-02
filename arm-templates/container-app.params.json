@@ -9,7 +9,7 @@
             "value": ""
         },
         "containerAppName": {
-            "value": "aca-p-we-ghr-01"
+            "value": ""
         },
         "containerAppCPU": {
             "value": "1"
@@ -21,30 +21,42 @@
             "value": ""
         },
         "storageAccountName": {
-            "value": "stapweghr01"
+            "value": ""
         },
         "storageAccountFileShareName":{
-            "value": "ghr"
+            "value": ""
         },
         "containerName":{
-            "value": "github-runner-linux"
+            "value": ""
         },
         "containerImage":{
             "value": ""
         },
-        "githubOwner":{
+        "secret1name":{
             "value": ""
         },
-        "githubRepository":{
+        "secret1value":{
             "value": ""
         },
-        "githubToken":{
+        "secret2name":{
+            "value": ""
+        },
+        "secret2value": {
+            "value": ""
+        },
+        "secret3name":{
+            "value": ""
+        },
+        "secret3value": {
             "value": ""
         },
         "minimumReplicas": {
             "value": 1
         },
         "revisionSuffix":{
+            "value": ""
+        },
+        "mountPath":{
             "value": ""
         }
     }

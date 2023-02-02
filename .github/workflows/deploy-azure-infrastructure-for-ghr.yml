@@ -216,13 +216,61 @@ jobs:
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: arm-templates/managed-environment.params.json workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountKey=${{needs.azure-infrastructure-foundation.outputs.storageAccountKey}} storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}}
+          parameters: | 
+            arm-templates/managed-environment.params.json
+            workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} 
+            workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} 
+            virtualNetworkName=${{ needs.azure-infrastructure-foundation.outputs.virtualNetworkName }} 
+            subnetName=${{ needs.azure-infrastructure-foundation.outputs.subnetName }} 
+            storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} 
+            storageAccountKey=${{needs.azure-infrastructure-foundation.outputs.storageAccountKey}} 
+            storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
-        name: Create the Container App
-        id: linuxContainerApp
+        name: Github Runner Linux in ACA
+        id: githubRunnerInACA
         with:
           template: arm-templates/container-app.template.json
-          parameters: arm-templates/container-app.params.json managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux githubOwner=${{ secrets.GH_OWNER }} githubRepository=${{ secrets.GH_REPOSITORY }} githubToken=${{ secrets.GH_PAT }} storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} revisionSuffix=${{ github.run_id }}
+          parameters: |
+            arm-templates/container-app.params.json
+            containerAppName="aca-p-we-ghr-02"
+            managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }}
+            containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }}
+            containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
+            containerName="github-runner-linux"
+            secret1name="GH_OWNER"
+            secret1value=${{ secrets.GH_OWNER }}
+            secret2name="GH_REPOSITORY"
+            secret2value=${{ secrets.GH_REPOSITORY }} 
+            secret3name="GH_TOKEN"
+            secret3value=${{ secrets.GH_PAT }}
+            storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} 
+            storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} 
+            revisionSuffix=${{ github.run_id }}
+            mountPath="/ghrunner/_work"
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
+
+      - uses: azure/arm-deploy@v1
+        name: DevOps Agent Linux in ACA
+        id: devopsAgentInACA
+        with:
+          template: arm-templates/container-app.template.json
+          parameters: |
+            arm-templates/container-app.params.json
+            containerAppName="aca-p-we-ghr-02"
+            managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} 
+            containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} 
+            containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux
+            containerName="devops-agent-linux"
+            secret1name="ADO_ORG_URL"
+            secret1value=${{ secrets.ADO_ORG_URL }}
+            secret2name="ADO_HOSTPOOL_NAME"
+            secret2value=${{ secrets.ADO_HOSTPOOL_NAME }}
+            secret3name="ADO_PAT"
+            secret3value=${{ secrets.ADO_PAT }}
+            storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} 
+            storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} 
+            revisionSuffix=${{ github.run_id }}
+            mountPath="/adoagent/_work"
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
