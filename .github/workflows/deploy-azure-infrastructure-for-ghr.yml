@@ -216,7 +216,7 @@ jobs:
         id: managedEnvironment
         with:
           template: arm-templates/managed-environment.template.json
-          parameters: | 
+          parameters: >
             arm-templates/managed-environment.params.json
             workspaceId=${{ needs.azure-infrastructure-foundation.outputs.workspaceId }} 
             workspaceKey=${{ needs.azure-infrastructure-foundation.outputs.workspaceKey }} 
@@ -232,7 +232,7 @@ jobs:
         id: githubRunnerInACA
         with:
           template: arm-templates/container-app.template.json
-          parameters: |
+          parameters: >
             arm-templates/container-app.params.json
             containerAppName="aca-p-we-ghr-02"
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }}
@@ -256,7 +256,7 @@ jobs:
         id: devopsAgentInACA
         with:
           template: arm-templates/container-app.template.json
-          parameters: |
+          parameters: >
             arm-templates/container-app.params.json
             containerAppName="aca-p-we-ghr-02"
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} 
