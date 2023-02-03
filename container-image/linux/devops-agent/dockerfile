@@ -1,0 +1,58 @@
+FROM ubuntu:20.04
+
+#input GitHub runner version argument
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TARGETARCH=linux-x64
+
+ARG ADO_PAT=""
+ARG ADO_ORG_URL=""
+
+RUN apt-get update -y && apt-get upgrade -y
+
+RUN apt-get install -y --no-install-recommends \
+    curl \
+    nodejs \
+    wget \
+    unzip \
+    vim \
+    git \
+    jq \
+    build-essential \
+    libffi-dev \
+    python3 \
+    python3-venv \
+    python3-dev \
+    python3-pip \
+    dpkg \
+    apt-transport-https \
+    apt-utils \
+    ca-certificates \
+    iputils-ping \
+    lsb-release \
+    software-properties-common
+
+#install azure-cli
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+# cd into the user directory, download and unzip the Azure DevOps agent
+RUN mkdir adoagent && cd adoagent \
+    && ADO_AGENT_DOWNLOAD_URL=$(curl -LsS -u user:$ADO_PAT -H 'Accept:application/json;' "$ADO_ORG_URL/_apis/distributedtask/packages/agent?platform=linux-x64&top=1" | jq -r '.value[0].downloadUrl') \
+    && curl -LsS $ADO_AGENT_DOWNLOAD_URL | tar -xz \
+    && ./bin/installdependencies.sh
+
+# install powershell
+RUN wget -q 'https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb' \
+    && dpkg -i packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get install -y powershell \
+    && rm -f packages-microsoft-prod.deb
+
+#install AzModule
+RUN pwsh -Command "Install-Module -Name Az -AllowClobber -Scope AllUsers -Verbose -Force"
+
+WORKDIR /adoagent
+
+ADD ./start.sh start.sh
+RUN chmod +x start.sh
+
+ENTRYPOINT ["./start.sh"]
