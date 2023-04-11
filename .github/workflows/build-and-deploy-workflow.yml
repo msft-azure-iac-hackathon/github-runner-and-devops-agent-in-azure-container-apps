@@ -1,4 +1,4 @@
-name: Deploy the Azure infrastructure for GitHub runners
+name: Build and Deploy the GH Runners and DevOps Agents in Azure Azure Container Apps
 on:
   push:
     branches: [ main, feature/* ]
@@ -28,7 +28,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
       
       - uses: azure/arm-deploy@v1
@@ -97,7 +97,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
 
       - run: |
@@ -134,7 +134,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
 
       - run: |
@@ -174,7 +174,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
 
       - run: |
@@ -200,7 +200,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          allow-no-subscriptions: true
           enable-AzPSSession: true
 
       - run: |
@@ -234,7 +234,7 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: >
             arm-templates/container-app.params.json
-            containerAppName="aca-p-we-ghr-01"
+            containerAppName="aca-p-we-agnts-01"
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }}
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }}
             containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
@@ -258,7 +258,7 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: >
             arm-templates/container-app.params.json
-            containerAppName="aca-p-we-ghr-02"
+            containerAppName="aca-p-we-agnts-02"
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} 
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} 
             containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux

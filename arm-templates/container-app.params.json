@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedIdentityName": {
-            "value": "id-p-we-ghr-01"
+            "value": "id-p-we-agnts-01"
         },
         "managedEnvironmentId": {
             "value": ""

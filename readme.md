@@ -7,13 +7,12 @@ This repository was created initially as a rework of the following 2 repositorie
 * [Bogdan Grozoiu](https://github.com/bogdan-grozoiu)
 
 # Status
-[![Deploy the Azure infrastructure for GitHub runners](https://github.com/MSFT-NL-Demo/github-runner-in-azure-container-apps/actions/workflows/deploy-azure-infrastructure-for-ghr.yml/badge.svg)](https://github.com/MSFT-NL-Demo/github-runner-in-azure-container-apps/actions/workflows/deploy-azure-infrastructure-for-ghr.yml)
+[![Build and Deploy the GH Runners and DevOps Agents in Azure Azure Container Apps](https://github.com/msft-azure-iac-hackathon/github-runner-and-devops-agent-in-azure-container-apps/actions/workflows/build-and-deploy-workflow.yml/badge.svg)](https://github.com/msft-azure-iac-hackathon/github-runner-and-devops-agent-in-azure-container-apps/actions/workflows/build-and-deploy-workflow.yml)
 # Scope
-* To empower every person and every organization on the planet to achieve more
-* Feel free to clone or fork this repo and use it for your own benefit
+Help organizations jumpstart their way into GitHub and Azure DevOps with low-cost self-hosted runners.
 
 # Goal
-Demonstrate the creation of GitHub Runners (Linux and Windows based) and the full greenfield Azure Infrastructure to run them.
+Demonstrate the creation of GitHub Runners and Azure DevOps Agents and the full greenfield Azure Infrastructure to run them.
 
 They will run in Azure Container Apps with private networking.
 
@@ -32,3 +31,13 @@ They will run in Azure Container Apps with private networking.
     - Repository permissions (Scoped to the GH_REPOSITORY above)
         - Read access to metadata
         - Read and Write access to administration
+
+* ADO_ORG_URL - the url of the Azure DevOps Organization where the new DevOps agents will self register
+* ADO_HOSTPOOL_NAME - the name of the Azure DevOps hostpool name where the new DevOps agents will self register
+* ADO_PAT - your fine grained token meeting the following requirements:
+    - Agents Pool
+        - Read and Manage
+    - Code
+        - Read and Write
+    - Packaging
+        - Read and Write

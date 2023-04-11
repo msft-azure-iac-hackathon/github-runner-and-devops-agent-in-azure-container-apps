@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "networkSecurityGroupName": {
-            "value": "nsg-p-we-ghr-01"
+            "value": "nsg-p-we-agnts-01"
         }
     }
 }

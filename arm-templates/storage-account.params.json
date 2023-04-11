@@ -3,19 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName":{
-            "value": "stapweghr01"
+            "value": "stapweagnts01"
         },
         "storageAccountFileShareName":{
-            "value": "ghr"
+            "value": "agnts"
         },
         "storageShareSizeInGB":{
             "value": 10
         },
         "privateEndpointName":{
-            "value": "pe-p-we-ghr-02"
+            "value": "pe-p-we-agnts-02"
         },
         "customNetworkInterfaceName":{
-            "value": "nic-p-we-ghr-02"
+            "value": "nic-p-we-agnts-02"
         },
         "virtualNetworkId":{
             "value":""

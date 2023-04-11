@@ -1,7 +1,7 @@
-name: Demo
+name: Demonstrative workflow for self-hosted runners
 on:
   push:
-    branches: [ main, candidate-fix/* ]
+    branches: [ demo-features/* ]
   workflow_dispatch:
 
 jobs:

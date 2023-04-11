@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "resourceGroupName": {
-            "value": "rg-p-we-ghr-grz"
+            "value": "rg-p-we-agnts-grz"
         },
         "resourceGroupLocation": {
             "value": "westeurope"

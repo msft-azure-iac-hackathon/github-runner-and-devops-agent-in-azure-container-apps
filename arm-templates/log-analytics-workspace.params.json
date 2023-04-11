@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "logAnalyticsWorkspaceName": {
-            "value": "law-p-we-ghr-01"
+            "value": "law-p-we-agnts-01"
         }
     }
 }

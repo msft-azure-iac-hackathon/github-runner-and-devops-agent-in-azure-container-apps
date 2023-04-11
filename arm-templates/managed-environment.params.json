@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedEnvironmentName": {
-            "value": "me-p-we-ghr-01"
+            "value": "me-p-we-agnts-01"
         },
         "workspaceId": {
             "value": ""
