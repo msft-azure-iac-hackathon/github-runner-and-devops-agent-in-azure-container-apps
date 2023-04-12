@@ -16,12 +16,21 @@ ls -asl
 export RUNNER_ALLOW_RUNASROOT="1"
 
 echo "Configuring runner ${RUNNER_NAME}...}"
-echo https://github.com/${GH_OWNER}/${GH_REPOSITORY}
-./config.sh --unattended --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
+
+#echo https://github.com/${GH_OWNER}/${GH_REPOSITORY}
+#./config.sh --unattended --url https://github.com/${GH_OWNER}/${GH_REPOSITORY} \
+#    --token ${REG_TOKEN} \
+#    --name ${RUNNER_NAME} \
+#    --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)" \
+#    --work _work/$(hostname)
+
+
+./config.sh --unattended --url https://github.com/${GH_OWNER} \
     --token ${REG_TOKEN} \
     --name ${RUNNER_NAME} \
     --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)" \
-    --work _work/$(hostname)
+    --work _work/$(hostname) \
+    --runnergroup Default
 
 
 cleanup() {
