@@ -201,12 +201,7 @@
                                     "secretRef": "[toLower(replace(parameters('secret3name'),'_','-'))]"
                                 }
                             ],
-                            "volumeMounts": [
-                                {
-                                    "mountPath": "[parameters('mountPath')]",
-                                    "volumeName": "azure-files-volume"
-                                }
-                            ]
+                            "volumeMounts": []
                         }
                     ],
                     "scale": {
