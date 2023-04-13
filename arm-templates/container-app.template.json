@@ -69,6 +69,13 @@
             },
             "defaultValue": 1
         },
+        "maximumReplicas": {
+            "type": "int",
+            "metadata": {
+                "description": "The maximum number of replicas."
+            },
+            "defaultValue": 30
+        },
         "revisionSuffix": {
             "type": "string",
             "metadata": {
@@ -205,7 +212,8 @@
                         }
                     ],
                     "scale": {
-                        "minReplicas": "[parameters('minimumReplicas')]"
+                        "minReplicas": "[parameters('minimumReplicas')]",
+                        "maxReplicas": "[parameters('maximumReplicas')]"
                     },
                     "volumes": [
                         {

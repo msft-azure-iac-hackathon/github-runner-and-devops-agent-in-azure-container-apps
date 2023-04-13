@@ -53,6 +53,9 @@
         "minimumReplicas": {
             "value": 1
         },
+        "maximumReplicas": {
+            "value": 30
+        },
         "revisionSuffix":{
             "value": ""
         },
