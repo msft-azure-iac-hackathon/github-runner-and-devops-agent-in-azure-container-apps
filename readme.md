@@ -27,11 +27,10 @@ They will run in Azure Container Apps with private networking.
 * GH_OWNER - the name of the GitHub organization where the new GH runner will self register
 * GH_REPOSITORY - the name of the GitHub repository where the new GH runner will self register
 * GH_PAT - your fine grained token meeting the following needs:
-    - Organization permissions: none
-    - Repository permissions (Scoped to the GH_REPOSITORY above)
-        - Read access to metadata
-        - Read and Write access to administration
-
+    - Organization permissions:
+        - Read access to organization administration
+        - Read and Write access to organization self hosted runners
+    - Repository permissions: none
 * ADO_ORG_URL - the url of the Azure DevOps Organization where the new DevOps agents will self register
 * ADO_HOSTPOOL_NAME - the name of the Azure DevOps hostpool name where the new DevOps agents will self register
 * ADO_PAT - your fine grained token meeting the following requirements:
