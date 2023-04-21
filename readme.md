@@ -25,7 +25,7 @@ They will run in Azure Container Apps with private networking.
 * CLIENT_ID - the ID of the client to be used for the OIDC login steps
 
 * GH_OWNER - the name of the GitHub organization where the new GH runner will self register
-* GH_REPOSITORY - the name of the GitHub repository where the new GH runner will self register
+* GH_REPOSITORY - the name of the GitHub repository where the new GH runner will self register (only if you intend to do worker registration at repo level)
 * GH_PAT - your fine grained token meeting the following needs:
     - Organization permissions:
         - Read access to organization administration
