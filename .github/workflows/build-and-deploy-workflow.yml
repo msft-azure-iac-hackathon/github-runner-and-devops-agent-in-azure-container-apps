@@ -28,7 +28,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          allow-no-subscriptions: true
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
       
       - uses: azure/arm-deploy@v1
@@ -97,7 +97,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          allow-no-subscriptions: true
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
       - run: |
@@ -134,7 +134,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          allow-no-subscriptions: true
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
       - run: |
@@ -174,7 +174,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          allow-no-subscriptions: true
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
       - run: |
@@ -200,7 +200,7 @@ jobs:
         with:         
           tenant-id: ${{ secrets.TENANT_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
-          allow-no-subscriptions: true
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
       - run: |
