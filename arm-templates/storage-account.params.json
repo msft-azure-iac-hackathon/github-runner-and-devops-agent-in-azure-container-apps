@@ -3,19 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName":{
-            "value": "stapweagnts01"
+            "value": "stapweghrdoa01"
         },
         "storageAccountFileShareName":{
-            "value": "agnts"
+            "value": "ghrdoa"
         },
         "storageShareSizeInGB":{
             "value": 10
         },
         "privateEndpointName":{
-            "value": "pe-p-we-agnts-02"
+            "value": "pe-p-we-ghrdoa-02"
         },
         "customNetworkInterfaceName":{
-            "value": "nic-p-we-agnts-02"
+            "value": "nic-p-we-ghrdoa-02"
         },
         "virtualNetworkId":{
             "value":""

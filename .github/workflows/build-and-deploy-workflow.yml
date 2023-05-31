@@ -234,7 +234,7 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: >
             arm-templates/container-app.params.json
-            containerAppName="aca-p-we-agnts-01"
+            containerAppName="aca-p-we-ghrdoa-01"
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }}
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }}
             containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
@@ -261,7 +261,7 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: >
             arm-templates/container-app.params.json
-            containerAppName="aca-p-we-agnts-02"
+            containerAppName="aca-p-we-ghrdoa-02"
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} 
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} 
             containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux
