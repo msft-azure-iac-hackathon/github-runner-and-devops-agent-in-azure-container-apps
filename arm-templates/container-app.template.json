@@ -102,6 +102,12 @@
         },
         "mountPath": {
             "type": "string"
+        },
+        "autoscaleRules": {
+            "type": "array",
+            "metadata": {
+                "description": "The autoscale rules, specific to GH or ADO"
+            }
         }
     },
     "functions": [],
@@ -144,7 +150,7 @@
             }
         },
         {
-            "apiVersion": "2022-06-01-preview",
+            "apiVersion": "2022-11-01-preview",
             "name": "[parameters('containerAppName')]",
             "dependsOn": [
                 "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
@@ -213,7 +219,8 @@
                     ],
                     "scale": {
                         "minReplicas": "[parameters('minimumReplicas')]",
-                        "maxReplicas": "[parameters('maximumReplicas')]"
+                        "maxReplicas": "[parameters('maximumReplicas')]",
+                        "rules": "[parameters('autoscaleRules')]"
                     },
                     "volumes": [
                         {

@@ -20,6 +20,7 @@ echo "Configuring runner ${RUNNER_NAME}..."
 echo https://github.com/${GH_OWNER}
 
 ./config.sh --unattended --url https://github.com/${GH_OWNER} \
+    --ephemeral \
     --token ${REG_TOKEN} \
     --name ${RUNNER_NAME} \
     --labels pwsh,azps,azcli,"$(lsb_release -si):$(lsb_release -sr)" \
