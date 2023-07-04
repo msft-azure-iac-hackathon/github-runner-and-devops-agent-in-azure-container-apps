@@ -63,7 +63,26 @@
             "value": ""
         },
         "autoscaleRules": {
-            "value": []
+            "value": [
+                {
+                    "name": "github-runner",
+                    "custom": {
+                        "type": "github-runner",
+                        "metadata": {
+                            "github-runner": "https://api.github.com",
+                            "owner": "msft-nl-gps",
+                            "runnerScope": "org",
+                            "targetWorkflowQueueLength": "1"
+                        },
+                        "auth": [
+                            {
+                                "secretRef": "gh-token",
+                                "triggerParameter": "personalAccessToken"
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     }
 }

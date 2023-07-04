@@ -252,7 +252,6 @@ jobs:
             containerAppCPU="2"
             containerAppMemory="4Gi"
             maximumReplicas=30
-            autoscaleRules='[{"name": "github-runner","custom": {"type": "github-runner","metadata": {"github-runner": "https://api.github.com","owner": "${{ secrets.GH_OWNER }}","runnerScope": "org","targetWorkflowQueueLength": "1"},"auth": [{"secretRef": "gh-token","triggerParameter": "personalAccessToken"}]}}]'
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
