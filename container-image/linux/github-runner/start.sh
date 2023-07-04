@@ -27,21 +27,21 @@ echo https://github.com/${GH_OWNER}
     --work _work/$(hostname)
 
 
-cleanup() {
-    echo "Removing runner ${RUNNER_NAME}...}"
-    REM_TOKEN=$(curl -sX POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GH_TOKEN}" https://api.github.com/orgs/${GH_OWNER}/actions/runners/remove-token | jq .token --raw-output)
-    echo ${REM_TOKEN}
-    ./config.sh remove --token ${REM_TOKEN}
-    echo "Removing work directory..."
-    ls -asl _work
-    rm -r _work/$(hostname)
-    ls -asl _work
-    echo "Runner successfully removed!"
-}
-
-trap 'cleanup; exit 0' EXIT
-trap 'cleanup; exit 130' INT
-trap 'cleanup; exit 143' TERM
+#cleanup() {
+#    echo "Removing runner ${RUNNER_NAME}...}"
+#    REM_TOKEN=$(curl -sX POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${GH_TOKEN}" https://api.github.com/orgs/${GH_OWNER}/actions/runners/remove-token | jq .token --raw-output)
+#    echo ${REM_TOKEN}
+#    ./config.sh remove --token ${REM_TOKEN}
+#    echo "Removing work directory..."
+#    ls -asl _work
+#    rm -r _work/$(hostname)
+#    ls -asl _work
+#    echo "Runner successfully removed!"
+#}
+#
+#trap 'cleanup; exit 0' EXIT
+#trap 'cleanup; exit 130' INT
+#trap 'cleanup; exit 143' TERM
 
 echo "Starting runner..."
 ./run.sh & wait $!
