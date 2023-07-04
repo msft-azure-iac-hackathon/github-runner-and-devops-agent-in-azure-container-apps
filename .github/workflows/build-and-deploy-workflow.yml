@@ -277,5 +277,4 @@ jobs:
             revisionSuffix=${{ github.run_id }}
             mountPath="/adoagent/_work"
             maximumReplicas=10
-            autoscaleRules=''
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
