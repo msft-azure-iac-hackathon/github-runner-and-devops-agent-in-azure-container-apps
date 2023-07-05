@@ -103,20 +103,9 @@ jobs:
       - run: |
           az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled true
           az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
       
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      
-      - name: Linux Container Image Build 
-        uses: docker/build-push-action@v3
-        with:
-          context: "{{defaultContext}}:container-image/linux/github-runner"
-          push: true
-          tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
-          build-args: PAT=${{ secrets.GH_PAT }}
+      - run: |
+          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux --secret-build-arg PAT=${{ secrets.GH_PAT }} "{{defaultContext}}:container-image/linux/github-runner"
 
   build-linux-devops-agent-container-image:
     runs-on: ubuntu-20.04
@@ -141,22 +130,8 @@ jobs:
           az acr update --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} --public-network-enabled true
           az acr login --name ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      
-      - name: Linux Container Image Build 
-        uses: docker/build-push-action@v3
-        with:
-          context: "{{defaultContext}}:container-image/linux/devops-agent"
-          push: true
-          tags: ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux
-          build-args: |
-            ADO_PAT=${{ secrets.ADO_PAT }}
-            ADO_ORG_URL=${{ secrets.ADO_ORG_URL }}
-            ADO_HOSTPOOL_NAME=${{ secrets.ADO_HOSTPOOL_NAME }}
+      - run: |
+          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux --secret-build-arg ADO_PAT=${{ secrets.ADO_PAT }} --secret-build-arg ADO_ORG_URL=${{ secrets.ADO_ORG_URL }} --secret-build-arg ADO_HOSTPOOL_NAME=${{ secrets.ADO_HOSTPOOL_NAME }} "{{defaultContext}}:container-image/linux/devops-agent"
 
   build-windows-github-runner-container-image:
     runs-on: windows-latest
