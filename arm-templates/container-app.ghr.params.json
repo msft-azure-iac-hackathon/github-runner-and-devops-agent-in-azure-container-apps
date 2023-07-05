@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "managedIdentityName": {
+            "value": "id-p-we-ghrdoa-01"
+        },
+        "managedEnvironmentId": {
+            "value": ""
+        },
+        "containerAppName": {
+            "value": "aca-p-we-ghr-01"
+        },
+        "containerAppCPU": {
+            "value": "2"
+        },
+        "containerAppMemory": {
+            "value": "4Gi"
+        },
+        "containerRegistryName": {
+            "value": ""
+        },
+        "storageAccountName": {
+            "value": ""
+        },
+        "storageAccountFileShareName":{
+            "value": ""
+        },
+        "containerName":{
+            "value": ""
+        },
+        "containerImage":{
+            "value": ""
+        },
+        "secret1name":{
+            "value": ""
+        },
+        "secret1value":{
+            "value": ""
+        },
+        "secret2name":{
+            "value": ""
+        },
+        "secret2value": {
+            "value": ""
+        },
+        "secret3name":{
+            "value": ""
+        },
+        "secret3value": {
+            "value": ""
+        },
+        "minimumReplicas": {
+            "value": 0
+        },
+        "maximumReplicas": {
+            "value": 50
+        },
+        "revisionSuffix":{
+            "value": ""
+        },
+        "mountPath":{
+            "value": "/ghrunner/_work"
+        },
+        "autoscaleRules": {
+            "value": [
+                {
+                    "name": "github-runner",
+                    "custom": {
+                        "type": "github-runner",
+                        "metadata": {
+                            "github-runner": "https://api.github.com",
+                            "owner": "msft-nl-gps",
+                            "runnerScope": "org",
+                            "targetWorkflowQueueLength": "1"
+                        },
+                        "auth": [
+                            {
+                                "secretRef": "gh-token",
+                                "triggerParameter": "personalAccessToken"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

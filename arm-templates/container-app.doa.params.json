@@ -9,13 +9,13 @@
             "value": ""
         },
         "containerAppName": {
-            "value": ""
+            "value": "aca-p-we-doa-01"
         },
         "containerAppCPU": {
-            "value": "1"
+            "value": "2"
         },
         "containerAppMemory": {
-            "value": "2Gi"
+            "value": "4Gi"
         },
         "containerRegistryName": {
             "value": ""
@@ -60,24 +60,26 @@
             "value": ""
         },
         "mountPath":{
-            "value": ""
+            "value": "/adoagent/_work"
         },
         "autoscaleRules": {
             "value": [
                 {
-                    "name": "github-runner",
+                    "name": "azure-pipelines",
                     "custom": {
-                        "type": "github-runner",
+                        "type": "azure-pipelines",
                         "metadata": {
-                            "github-runner": "https://api.github.com",
-                            "owner": "msft-nl-gps",
-                            "runnerScope": "org",
-                            "targetWorkflowQueueLength": "1"
+                            "poolName": "Default",
+                            "targetPipelinesQueueLength": "1"
                         },
                         "auth": [
                             {
-                                "secretRef": "gh-token",
+                                "secretRef": "ado-pat",
                                 "triggerParameter": "personalAccessToken"
+                            },
+                            {
+                                "secretRef": "ado-org-url",
+                                "triggerParameter": "organizationURL"
                             }
                         ]
                     }
