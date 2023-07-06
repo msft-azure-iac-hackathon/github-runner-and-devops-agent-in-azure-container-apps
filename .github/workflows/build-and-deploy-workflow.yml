@@ -106,7 +106,7 @@ jobs:
       
       - run: |
           cd container-image/linux/github-runner/
-          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux --secret-build-arg PAT=${{ secrets.GH_PAT }} --secret-build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:22.04 .
+          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux --secret-build-arg PAT=${{ secrets.GH_PAT }} --build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:22.04 .
 
   build-linux-devops-agent-container-image:
     runs-on: ubuntu-latest
@@ -133,7 +133,7 @@ jobs:
 
       - run: |
           cd container-image/linux/devops-agent/
-          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux --secret-build-arg ADO_PAT=${{ secrets.ADO_PAT }} --secret-build-arg ADO_ORG_URL=${{ secrets.ADO_ORG_URL }} --secret-build-arg ADO_HOSTPOOL_NAME=${{ secrets.ADO_HOSTPOOL_NAME }} --secret-build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:20.04 .
+          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux --secret-build-arg ADO_PAT=${{ secrets.ADO_PAT }} --secret-build-arg ADO_ORG_URL=${{ secrets.ADO_ORG_URL }} --secret-build-arg ADO_HOSTPOOL_NAME=${{ secrets.ADO_HOSTPOOL_NAME }} --build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:20.04 .
 
   build-windows-github-runner-container-image:
     runs-on: windows-latest
