@@ -1,5 +1,5 @@
 # base image
-FROM ubuntu:22.04
+FROM crpweghrdoa01.azurecr.io/ubuntu:22.04
 
 #input GitHub runner version argument
 ENV DEBIAN_FRONTEND=noninteractive

@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM crpweghrdoa01.azurecr.io/ubuntu:20.04
 
 #input GitHub runner version argument
 ENV DEBIAN_FRONTEND=noninteractive
