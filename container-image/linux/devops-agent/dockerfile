@@ -1,5 +1,3 @@
-ARG ADO_PAT=""
-ARG ADO_ORG_URL=""
 ARG BASEIMAGE=""
 
 FROM $BASEIMAGE
@@ -7,6 +5,9 @@ FROM $BASEIMAGE
 #input GitHub runner version argument
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TARGETARCH=linux-x64
+
+ARG ADO_PAT=""
+ARG ADO_ORG_URL=""
 
 RUN apt-get update -y && apt-get upgrade -y
 
