@@ -6,7 +6,7 @@ on:
 
 jobs:
   azure-infrastructure-foundation:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-lastest
     permissions:
       contents: read
       id-token: write
@@ -82,7 +82,7 @@ jobs:
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
   build-linux-github-runner-container-image:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-lastest
     needs: azure-infrastructure-foundation
     if: true
     permissions:
@@ -106,10 +106,10 @@ jobs:
       
       - run: |
           cd container-image/linux/github-runner/
-          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux --secret-build-arg PAT=${{ secrets.GH_PAT }} .
+          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux --secret-build-arg PAT=${{ secrets.GH_PAT }} --secret-build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:22.04 .
 
   build-linux-devops-agent-container-image:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-lastest
     needs: azure-infrastructure-foundation
     if: true
     permissions:
@@ -133,7 +133,7 @@ jobs:
 
       - run: |
           cd container-image/linux/devops-agent/
-          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux --secret-build-arg ADO_PAT=${{ secrets.ADO_PAT }} --secret-build-arg ADO_ORG_URL=${{ secrets.ADO_ORG_URL }} --secret-build-arg ADO_HOSTPOOL_NAME=${{ secrets.ADO_HOSTPOOL_NAME }} .
+          az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux --secret-build-arg ADO_PAT=${{ secrets.ADO_PAT }} --secret-build-arg ADO_ORG_URL=${{ secrets.ADO_ORG_URL }} --secret-build-arg ADO_HOSTPOOL_NAME=${{ secrets.ADO_HOSTPOOL_NAME }} --secret-build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:20.04 .
 
   build-windows-github-runner-container-image:
     runs-on: windows-latest
@@ -163,7 +163,7 @@ jobs:
           docker push ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows
 
   azure-infrastructure-continuation:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-lastest
     needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-linux-devops-agent-container-image]
     permissions:
       contents: read

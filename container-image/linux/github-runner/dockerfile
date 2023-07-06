@@ -1,11 +1,12 @@
+ARG PAT=""
+ARG BASEIMAGE=""
+
 # base image
-FROM crpweghrdoa01.azurecr.io/ubuntu:22.04
+FROM $BASEIMAGE
 
 #input GitHub runner version argument
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TARGETARCH=linux-x64
-
-ARG PAT=""
 
 RUN apt-get update -y && apt-get upgrade -y
 
