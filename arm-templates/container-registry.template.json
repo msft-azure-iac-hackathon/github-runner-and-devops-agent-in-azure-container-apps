@@ -50,6 +50,18 @@
             }
         },
         {
+            "type": "Microsoft.ContainerRegistry/registries/cacheRules",
+            "apiVersion": "2023-01-01-preview",
+            "name": "[concat(parameters('acrName'), '/Ubuntu-Cache')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ContainerRegistry/registries', parameters('acrName'))]"
+            ],
+            "properties": {
+                "sourceRepository": "docker.io/library/ubuntu",
+                "targetRepository": "ubuntu"
+            }
+        },
+        {
             "location": "[resourceGroup().location]",
             "name": "[parameters('privateEndpointName')]",
             "type": "Microsoft.Network/privateEndpoints",
