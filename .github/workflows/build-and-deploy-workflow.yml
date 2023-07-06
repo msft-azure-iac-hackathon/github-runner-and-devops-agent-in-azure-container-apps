@@ -6,7 +6,7 @@ on:
 
 jobs:
   azure-infrastructure-foundation:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
@@ -82,7 +82,7 @@ jobs:
           resourceGroupName: ${{ steps.resourceGroup.outputs.resourceGroupName }}
 
   build-linux-github-runner-container-image:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     needs: azure-infrastructure-foundation
     if: true
     permissions:
@@ -109,7 +109,7 @@ jobs:
           az acr build -r ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}} -f dockerfile -t ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux --secret-build-arg PAT=${{ secrets.GH_PAT }} --secret-build-arg BASEIMAGE=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/ubuntu:22.04 .
 
   build-linux-devops-agent-container-image:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     needs: azure-infrastructure-foundation
     if: true
     permissions:
@@ -163,7 +163,7 @@ jobs:
           docker push ${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/windows
 
   azure-infrastructure-continuation:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     needs: [azure-infrastructure-foundation, build-linux-github-runner-container-image, build-linux-devops-agent-container-image]
     permissions:
       contents: read
