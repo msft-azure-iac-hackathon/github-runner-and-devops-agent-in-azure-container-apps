@@ -24,14 +24,13 @@ export AGENT_ALLOW_RUNASROOT="1"
     --acceptTeeEula & wait $!
 
 cleanup() {
-  if [ -e config.sh ]; then
-   echo "Cleanup. Removing Azure Pipelines agent..."
-    while true; do
-      ./config.sh remove --unattended --auth PAT --token $ADO_PAT && break
-      echo "Retrying in 30 seconds..."
-      sleep 30
-    done
-  fi
+    echo "Removing Azure Pipelines agent..."
+    ./config.sh remove --unattended --auth PAT --token $ADO_PAT
+    echo "Removing work directory..."
+    #ls -asl _work
+    #rm -r _work/$(hostname)
+    #ls -asl _work
+    echo "Runner successfully removed!"
 }
 
 trap 'cleanup; exit 0' EXIT
