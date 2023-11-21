@@ -251,7 +251,7 @@ jobs:
       - id: createADOPlaceholderAgent
         name: Create Placeholder Agent for Azure DevOps 
         run: |
-          az containerapp job create -n "ADO_PLACEHOLDER_JOB" -g ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }} --environment "${{ steps.managedEnvironment.outputs.managedEnvironmentName }}" \
+          az containerapp job create -n "ado-placeholder-job" -g ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }} --environment "${{ steps.managedEnvironment.outputs.managedEnvironmentName }}" \
             --trigger-type Manual \
             --replica-timeout 300 \
             --replica-retry-limit 1 \
@@ -267,5 +267,5 @@ jobs:
       - id: manuallyTriggerADOPlaceholderAgent
         name: Manually Trigger the Job Placeholder Agent for Azure DevOps 
         run: |
-          az containerapp job start -n "ADO_PLACEHOLDER_JOB" -g "${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}"
+          az containerapp job start -n "ado-placeholder-job" -g "${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}"
         
