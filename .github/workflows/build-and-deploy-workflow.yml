@@ -262,7 +262,8 @@ jobs:
             --memory "4Gi" \
             --secrets "personal-access-token=${{ secrets.ADO_PAT }}" "organization-url=${{ secrets.ADO_ORG_URL }}" \
             --env-vars "AZP_TOKEN=secretref:personal-access-token" "AZP_URL=secretref:organization-url" "AZP_POOL=${{ secrets.ADO_HOSTPOOL_NAME }}" "AZP_PLACEHOLDER=1" "AZP_AGENT_NAME=placeholder-agent" \
-            --registry-server "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io"
+            --registry-server "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io" \
+            --registry-identity "${{ steps.devopsAgentInACA.outputs.containerAppManagedIdentity }}" \
       
       - id: manuallyTriggerADOPlaceholderAgent
         name: Manually Trigger the Job Placeholder Agent for Azure DevOps 
