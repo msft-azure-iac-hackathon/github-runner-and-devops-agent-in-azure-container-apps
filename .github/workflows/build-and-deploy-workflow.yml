@@ -260,7 +260,7 @@ jobs:
             --image "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux" \
             --cpu "2.0" \
             --memory "4Gi" \
-            --secrets "personal-access-token=${{ secrets.ADO_PAT }}" "organization-url=${{ secrets.ADO_ORG_URL }} hostpool-name=${{ secrets.ADO_HOSTPOOL_NAME }}" \
+            --secrets "personal-access-token=${{ secrets.ADO_PAT }}" "organization-url=${{ secrets.ADO_ORG_URL }}" "hostpool-name=${{ secrets.ADO_HOSTPOOL_NAME }}" \
             --env-vars "ADO_PAT=secretref:personal-access-token" "ADO_ORG_URL=secretref:organization-url" "ADO_HOSTPOOL_NAME=secretref:hostpool-name" "AZP_PLACEHOLDER=1" "AZP_AGENT_NAME=placeholder-agent" \
             --registry-server "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io" \
             --registry-identity "${{ steps.devopsAgentInACA.outputs.containerAppManagedIdentity }}" \
