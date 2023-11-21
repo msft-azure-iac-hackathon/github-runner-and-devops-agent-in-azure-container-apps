@@ -96,6 +96,10 @@
         "managedEnvironmentId": {
             "type": "string",
             "value": "[resourceId('Microsoft.App/managedEnvironments', parameters('managedEnvironmentName'))]"
+        },
+        "managedEnvironmentName": {
+            "type": "string",
+            "value": "[parameters('managedEnvironmentName')]"
         }
     }
 }
