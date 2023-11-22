@@ -247,3 +247,26 @@ jobs:
             storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} 
             revisionSuffix=${{ github.run_id }}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
+
+      - id: createADOPlaceholderAgent
+        name: Create Placeholder Agent for Azure DevOps 
+        run: |
+          az containerapp job create -n "aca-p-we-devops-agents-02" -g ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }} --environment "${{ steps.managedEnvironment.outputs.managedEnvironmentName }}" \
+            --trigger-type Manual \
+            --replica-timeout 300 \
+            --replica-retry-limit 1 \
+            --replica-completion-count 1 \
+            --parallelism 1 \
+            --image "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux" \
+            --cpu "2.0" \
+            --memory "4Gi" \
+            --secrets "personal-access-token=${{ secrets.ADO_PAT }}" "organization-url=${{ secrets.ADO_ORG_URL }}" "hostpool-name=${{ secrets.ADO_HOSTPOOL_NAME }}" \
+            --env-vars "ADO_PAT=secretref:personal-access-token" "ADO_ORG_URL=secretref:organization-url" "ADO_HOSTPOOL_NAME=secretref:hostpool-name" "ADO_PLACEHOLDER=1" \
+            --registry-server "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io" \
+            --registry-identity "${{ steps.devopsAgentInACA.outputs.containerAppManagedIdentity }}" \
+      
+      - id: manuallyTriggerADOPlaceholderAgent
+        name: Manually Trigger the Job Placeholder Agent for Azure DevOps 
+        run: |
+          az containerapp job start -n "aca-p-we-devops-agents-02" -g "${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}"
+        

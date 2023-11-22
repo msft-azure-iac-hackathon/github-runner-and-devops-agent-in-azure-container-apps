@@ -5,6 +5,7 @@ ADO_ORG_URL=$ADO_ORG_URL
 ADO_PAT=$ADO_PAT
 ADO_HOSTPOOL_NAME=$ADO_HOSTPOOL_NAME
 ADO_AGENT_NAME=$(hostname)
+ADO_PLACEHOLDER=$ADO_PLACEHOLDER
 
 ls -asl
 mkdir -p ./_work/$(hostname)
@@ -24,6 +25,10 @@ export AGENT_ALLOW_RUNASROOT="1"
     --acceptTeeEula & wait $!
 
 cleanup() {
+    if [ -n "$ADO_PLACEHOLDER" ]; then
+        echo 'Running in placeholder mode, skipping cleanup...'
+        return
+    fi
     echo "Removing Azure Pipelines agent..."
     ./config.sh remove --unattended --auth PAT --token $ADO_PAT
     echo "Removing work directory..."

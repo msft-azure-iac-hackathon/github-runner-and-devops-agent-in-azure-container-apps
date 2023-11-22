@@ -233,5 +233,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "containerAppManagedIdentity": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
+        }
+    }
 }
