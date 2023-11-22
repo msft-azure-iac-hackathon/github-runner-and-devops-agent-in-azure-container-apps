@@ -36,7 +36,7 @@ jobs:
         id: resourceGroup
         with:
           scope: subscription
-          region: italynorth
+          region: uksouth
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           template: arm-templates/resource-group.template.json
           parameters: arm-templates/resource-group.params.json
@@ -251,7 +251,7 @@ jobs:
       - id: createADOPlaceholderAgent
         name: Create Placeholder Agent for Azure DevOps 
         run: |
-          az containerapp job create -n "aca-p-int-devops-agents-02" -g ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }} --environment "${{ steps.managedEnvironment.outputs.managedEnvironmentName }}" \
+          az containerapp job create -n "aca-p-uks-devops-agents-02" -g ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }} --environment "${{ steps.managedEnvironment.outputs.managedEnvironmentName }}" \
             --trigger-type Manual \
             --replica-timeout 300 \
             --replica-retry-limit 1 \
@@ -268,5 +268,5 @@ jobs:
       - id: manuallyTriggerADOPlaceholderAgent
         name: Manually Trigger the Job Placeholder Agent for Azure DevOps 
         run: |
-          az containerapp job start -n "aca-p-int-devops-agents-02" -g "${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}"
+          az containerapp job start -n "aca-p-uks-devops-agents-02" -g "${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}"
         
