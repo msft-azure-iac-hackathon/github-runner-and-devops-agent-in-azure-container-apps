@@ -36,7 +36,7 @@ jobs:
         id: resourceGroup
         with:
           scope: subscription
-          region: westeurope
+          region: italynorth
           subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
           template: arm-templates/resource-group.template.json
           parameters: arm-templates/resource-group.params.json

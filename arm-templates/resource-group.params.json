@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "resourceGroupName": {
-            "value": "rg-p-we-runners-agents"
+            "value": "rg-p-itn-runners-agents"
         },
         "resourceGroupLocation": {
-            "value": "westeurope"
+            "value": "italynorth"
         }
     }
 }

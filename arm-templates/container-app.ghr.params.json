@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedIdentityName": {
-            "value": "id-p-we-ghrdoa-01"
+            "value": "id-p-itn-ghrdoa-01"
         },
         "managedEnvironmentId": {
             "value": ""
         },
         "containerAppName": {
-            "value": "aca-p-we-github-runners-01"
+            "value": "aca-p-itn-github-runners-01"
         },
         "containerAppCPU": {
             "value": "2"

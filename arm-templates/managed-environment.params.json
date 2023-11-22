@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedEnvironmentName": {
-            "value": "me-p-we-ghrdoa-01"
+            "value": "me-p-itn-ghrdoa-01"
         },
         "workspaceId": {
             "value": ""
