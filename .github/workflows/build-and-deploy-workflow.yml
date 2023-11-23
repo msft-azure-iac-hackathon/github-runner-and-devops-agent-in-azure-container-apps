@@ -1,7 +1,7 @@
 name: Build and Deploy the GH Runners and DevOps Agents in Azure Azure Container Apps
 on:
   push:
-    branches: [ main, feature/*, Feature/* ]
+    branches: [ main, feature/* ]
   workflow_dispatch:
 
 jobs:
