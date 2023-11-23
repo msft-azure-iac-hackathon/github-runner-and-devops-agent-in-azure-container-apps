@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "logAnalyticsWorkspaceName": {
-            "value": "law-p-uks-ghrdoa-01"
+            "value": "law-p-uks-ghrdoa"
         }
     }
 }

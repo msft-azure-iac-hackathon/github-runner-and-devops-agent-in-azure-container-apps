@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedIdentityName": {
-            "value": "id-p-uks-ghrdoa-01"
+            "value": "id-p-uks-ghrdoa"
         },
         "managedEnvironmentId": {
             "value": ""
         },
         "containerAppName": {
-            "value": "aca-p-uks-devops-agents-01"
+            "value": "aca-p-uks-devops-agents"
         },
         "containerAppCPU": {
             "value": "2"

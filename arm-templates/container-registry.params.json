@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "acrName": {
-            "value": "crpuksghrdoa01"
+            "value": "crpuksghrdoa"
         },
         "privateEndpointName":{
             "value": "pe-p-uks-ghrdoa-01"

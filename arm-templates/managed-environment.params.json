@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "managedEnvironmentName": {
-            "value": "me-p-uks-ghrdoa-01"
+            "value": "me-p-uks-ghrdoa"
         },
         "workspaceId": {
             "value": ""
