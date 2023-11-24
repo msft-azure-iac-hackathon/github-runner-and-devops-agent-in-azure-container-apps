@@ -197,6 +197,7 @@ jobs:
             arm-templates/user-assigned-identity-and-role-assignments.params.json
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }}
             storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}}
+          resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
 
       - uses: azure/arm-deploy@v1
         name: Create the Managed Environment
