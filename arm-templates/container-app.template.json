@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "managedIdentityName": {
+        "userAssignedIdentityId": {
             "type": "string",
             "metadata": {
-                "description": "The name of the managed identity."
+                "description": "The user assigned identity id."
             }
         },
         "managedEnvironmentId": {
@@ -38,12 +38,7 @@
                 "description": "The name of the container registry."
             }
         },
-        "storageAccountName": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the storage account."
-            }
-        },
+        
         "storageAccountFileShareName": {
             "type": "string",
             "metadata": {
@@ -114,56 +109,17 @@
     "variables": {
         "containerRegistryServerName": "[concat(parameters('containerRegistryName'), '.azurecr.io')]"
     },
-    "resources": [
-        {
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
-            "apiVersion": "2018-11-30",
-            "name": "[parameters('managedIdentityName')]",
-            "location": "[resourceGroup().location]"
-        },
-        {
-            "type": "Microsoft.Authorization/roleAssignments",
-            "apiVersion": "2022-04-01",
-            "name": "[guid(resourceGroup().id, parameters('containerRegistryName'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
-            ],
-            "scope": "[resourceId('Microsoft.ContainerRegistry/registries',parameters('containerRegistryName'))]",
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '7f951dda-4ed3-4680-a7ca-43fe172d538d')]",
-                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')), '2018-11-30').principalId]",
-                "principalType": "ServicePrincipal"
-            }
-        },
-        {
-            "type": "Microsoft.Authorization/roleAssignments",
-            "apiVersion": "2022-04-01",
-            "name": "[guid(resourceGroup().id, parameters('storageAccountName'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
-            ],
-            "scope": "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]",
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'a7264617-510b-434b-a828-9731dc254ea7')]",
-                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName')), '2018-11-30').principalId]",
-                "principalType": "ServicePrincipal"
-            }
-        },
+    "resources": [        
         {
             "apiVersion": "2022-11-01-preview",
             "name": "[parameters('containerAppName')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]",
-                "[resourceId('Microsoft.Authorization/roleAssignments', guid(resourceGroup().id, parameters('containerRegistryName')))]",
-                "[resourceId('Microsoft.Authorization/roleAssignments', guid(resourceGroup().id, parameters('storageAccountName')))]"
-            ],
             "type": "Microsoft.App/containerapps",
             "kind": "containerapps",
             "location": "[resourceGroup().location]",
             "identity": {
                 "type": "userAssigned",
                 "userAssignedIdentities": {
-                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]": {}
+                    "[parameters('userAssignedIdentityId')]": {}
                 }
             },
             "properties": {
@@ -171,7 +127,7 @@
                 "configuration": {
                     "registries": [
                         {
-                            "identity": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}', parameters('managedIdentityName')))]",
+                            "identity": "[parameters('userAssignedIdentityId')]",
                             "server": "[variables('containerRegistryServerName')]"
                         }
                     ],
@@ -235,10 +191,5 @@
             }
         }
     ],
-    "outputs": {
-        "containerAppManagedIdentity": {
-            "type": "string",
-            "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
-        }
-    }
+    "outputs": {}
 }

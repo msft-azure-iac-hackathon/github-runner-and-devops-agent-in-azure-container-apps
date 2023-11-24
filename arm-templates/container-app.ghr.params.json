@@ -1,9 +1,9 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.1",
-    "parameters": {
-        "managedIdentityName": {
-            "value": "id-p-uks-ghrdoa"
+    "parameters": {      
+        "userAssignedIdentityId": {
+            "value": ""
         },
         "managedEnvironmentId": {
             "value": ""
@@ -18,9 +18,6 @@
             "value": "4Gi"
         },
         "containerRegistryName": {
-            "value": ""
-        },
-        "storageAccountName": {
             "value": ""
         },
         "storageAccountFileShareName":{

@@ -189,6 +189,16 @@ jobs:
           az provider register -n 'Microsoft.ContainerService'
 
       - uses: azure/arm-deploy@v1
+        name: Create the Managed Identity and Set RBAC Assignemnt
+        id: userAssignedIdentityAndRoleAssignments
+        with:
+          template: arm-templates/user-assigned-identity-and-role-assignments.template.json
+          parameters: >
+            arm-templates/user-assigned-identity-and-role-assignments.params.json
+            containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }}
+            storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}}
+
+      - uses: azure/arm-deploy@v1
         name: Create the Managed Environment
         id: managedEnvironment
         with:
@@ -211,6 +221,7 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: >
             arm-templates/container-app.ghr.params.json
+            userAssignedIdentityId=${{ steps.userAssignedIdentityAndRoleAssignments.outputs.userAssignedIdentityResourceId }}
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }}
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }}
             containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/github-runner/linux
@@ -220,8 +231,7 @@ jobs:
             secret2name="GH_REPOSITORY"
             secret2value=${{ secrets.GH_REPOSITORY }} 
             secret3name="GH_TOKEN"
-            secret3value=${{ secrets.GH_PAT }}
-            storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} 
+            secret3value=${{ secrets.GH_PAT }}             
             storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} 
             revisionSuffix=${{ github.run_id }}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
@@ -233,6 +243,7 @@ jobs:
           template: arm-templates/container-app.template.json
           parameters: >
             arm-templates/container-app.doa.params.json
+            userAssignedIdentityId=${{ steps.userAssignedIdentityAndRoleAssignments.outputs.userAssignedIdentityResourceId }}
             managedEnvironmentId=${{ steps.managedEnvironment.outputs.managedEnvironmentId }} 
             containerRegistryName=${{ needs.azure-infrastructure-foundation.outputs.containerRegistryName }} 
             containerImage=${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io/devops-agent/linux
@@ -243,7 +254,6 @@ jobs:
             secret2value=${{ secrets.ADO_HOSTPOOL_NAME }}
             secret3name="ADO_PAT"
             secret3value=${{ secrets.ADO_PAT }}
-            storageAccountName=${{needs.azure-infrastructure-foundation.outputs.storageAccountName}} 
             storageAccountFileShareName=${{needs.azure-infrastructure-foundation.outputs.storageAccountFileShareName}} 
             revisionSuffix=${{ github.run_id }}
           resourceGroupName: ${{ needs.azure-infrastructure-foundation.outputs.resourceGroupName }}
@@ -263,7 +273,7 @@ jobs:
             --secrets "personal-access-token=${{ secrets.ADO_PAT }}" "organization-url=${{ secrets.ADO_ORG_URL }}" "hostpool-name=${{ secrets.ADO_HOSTPOOL_NAME }}" \
             --env-vars "ADO_PAT=secretref:personal-access-token" "ADO_ORG_URL=secretref:organization-url" "ADO_HOSTPOOL_NAME=secretref:hostpool-name" "ADO_PLACEHOLDER=1" \
             --registry-server "${{needs.azure-infrastructure-foundation.outputs.containerRegistryName}}.azurecr.io" \
-            --registry-identity "${{ steps.devopsAgentInACA.outputs.containerAppManagedIdentity }}" \
+            --registry-identity "${{ steps.userAssignedIdentityAndRoleAssignments.outputs.userAssignedIdentityResourceId }}" \
       
       - id: manuallyTriggerADOPlaceholderAgent
         name: Manually Trigger the Job Placeholder Agent for Azure DevOps 
