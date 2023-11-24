@@ -140,7 +140,9 @@
             "apiVersion": "2022-04-01",
             "name": "[guid(resourceGroup().id, parameters('storageAccountName'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]"
+                "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('managedIdentityName'))]",
+                "[resourceId('Microsoft.Authorization/roleAssignments', guid(resourceGroup().id, parameters('containerRegistryName')))]",
+                "[resourceId('Microsoft.Authorization/roleAssignments', guid(resourceGroup().id, parameters('storageAccountName')))]"
             ],
             "scope": "[resourceId('Microsoft.Storage/storageAccounts',parameters('storageAccountName'))]",
             "properties": {
