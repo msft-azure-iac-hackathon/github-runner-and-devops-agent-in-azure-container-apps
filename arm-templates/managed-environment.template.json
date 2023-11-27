@@ -82,6 +82,9 @@
             "type": "Microsoft.App/managedEnvironments/storages",
             "apiVersion": "2022-06-01-preview",
             "name": "[concat(parameters('managedEnvironmentName'), '/', parameters('storageAccountFileShareName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.App/managedEnvironments', parameters('managedEnvironmentName'))]"
+            ],
             "properties": {
                 "azureFile": {
                     "accessMode": "ReadWrite",
