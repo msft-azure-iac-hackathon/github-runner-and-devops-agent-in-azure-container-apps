@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.1",
     "parameters": {
         "networkSecurityGroupName": {
-            "value": "nsg-p-we-ghrdoa-01"
+            "value": "nsg-p-uks-ghrdoa"
         }
     }
 }

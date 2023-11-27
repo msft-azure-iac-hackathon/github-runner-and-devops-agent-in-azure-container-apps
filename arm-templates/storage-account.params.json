@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName":{
-            "value": "stapweghrdoa01"
+            "value": "stapuksghrdoa"
         },
         "storageAccountFileShareName":{
             "value": "ghrdoa"
@@ -12,10 +12,10 @@
             "value": 10
         },
         "privateEndpointName":{
-            "value": "pe-p-we-ghrdoa-02"
+            "value": "pe-p-uks-ghrdoa-02"
         },
         "customNetworkInterfaceName":{
-            "value": "nic-p-we-ghrdoa-02"
+            "value": "nic-p-uks-ghrdoa-02"
         },
         "virtualNetworkId":{
             "value":""

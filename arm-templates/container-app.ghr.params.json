@@ -1,15 +1,15 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.1",
-    "parameters": {
-        "managedIdentityName": {
-            "value": "id-p-we-ghrdoa-01"
+    "parameters": {      
+        "userAssignedIdentityId": {
+            "value": ""
         },
         "managedEnvironmentId": {
             "value": ""
         },
         "containerAppName": {
-            "value": "aca-p-we-github-runners-01"
+            "value": "aca-p-uks-github-runners"
         },
         "containerAppCPU": {
             "value": "2"
@@ -18,9 +18,6 @@
             "value": "4Gi"
         },
         "containerRegistryName": {
-            "value": ""
-        },
-        "storageAccountName": {
             "value": ""
         },
         "storageAccountFileShareName":{
